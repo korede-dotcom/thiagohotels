@@ -44,9 +44,6 @@ const User = sequelize.define('user', {
     },
     roleName: {
         type: DataTypes.STRING,
-        
-     
-    
       }
 },{
     hooks:{
@@ -58,7 +55,7 @@ const User = sequelize.define('user', {
                     user.roleName = "ceo";
                     break;
                   case 2:
-                    user.roleName = "eventmanager";
+                    user.roleName = "Cleaners";
                     break;
                   case 3:
                     user.roleName = "gymmanager";
@@ -67,7 +64,7 @@ const User = sequelize.define('user', {
                     user.roleName = "hotelmanager";
                     break;
                   case 5:
-                    user.roleName = "secretary";
+                    user.roleName = "Security";
                     break;
                   case 6:
                     user.roleName = "staffs";
@@ -80,6 +77,9 @@ const User = sequelize.define('user', {
                     break;
                   case 9:
                     user.roleName = "event receptionist";
+                    break;
+                  case 10:
+                    user.roleName = "bar manager";
                     break;
                   default:
                     break;

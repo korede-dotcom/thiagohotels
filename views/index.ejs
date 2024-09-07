@@ -43,6 +43,7 @@
 				transform: rotate(360deg);
 			}
 		} 
+ 
 	</style>
   
 </head>
@@ -358,34 +359,59 @@
         <span class="sub-title">Thiago Luxury Rooms</span>
         <h2>Luxury Rooms & Suites</h2>
       </div>
-      <div class="row">
+    
         <!-- room-block -->
-        <% pkgs.forEach(pkg => {    %>
-         
-          <div class="room-block col-lg-6 col-md-6 col-sm-12">
-            <div class="inner-box wow fadeIn">
-              <div class="image-box">
-                <figure class="image-2 overlay-anim"><img src="images/resource/room-1.jpg" alt=""></figure>
+        <div class="row">
+          <style>
+             .image-2 img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+  }
+
+  /* Optional: Add some margin for small screens to better center */
+  @media (max-width: 576px) {
+    .room-block {
+      margin-bottom: 20px;
+
+    }
+    .image-2 img{
+      margin-inline: 10px;
+    }
+  }
+          </style>
+          
+          <div class="row">
+            <% pkgs.forEach(pkg => { %>
+              <!-- Each package as a column -->
+              <div class="room-block col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center">
+                <div class="inner-box wow fadeIn text-center">
+                  <div class="image-box">
+                    <figure class="image-2 overlay-anim">
+                      <img src="<%= pkg.picture[0] %>" alt="" class="img-fluid">
+                    </figure>
+                  </div>
+                  <div class="content-box">
+                    <%= pkg.category_name.toUpperCase() %>
+                    <h6 class="title"><a href="/rooms?id=<%= pkg._id %>"><%= pkg.category_name %></a></h6>
+                    <span class="price">#<%= pkg.price %> / NIGHT</span>
+                  </div>
+                  <div class="box-caption">
+                    <a href="/rooms?id=<%= pkg._id %>" title="" class="book-btn">View</a>
+                    <ul class="bx-links">
+                      <li><a href="room-details.html" title=""><i class="fa fa-wifi"></i></a></li>
+                      <li><a href="room-details.html" title=""><i class="fa fa-bed"></i></a></li>
+                      <li><a href="room-details.html" title=""><i class="fa fa-bath"></i></a></li>
+                      <li><a href="room-details.html" title=""><i class="fa fa-shower"></i></a></li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <div class="content-box">
-          <%=pkg.category_name.toUpperCase() %>
-                <h6 class="title"><a href="room-details.html">
-          <%=pkg.category_name %>
-                </a></h6>
-                <span class="price">#<%=pkg.price %> / NIGHT</span>
-              </div>
-              <div class="box-caption">
-                <a href="room-details.html" title="" class="book-btn">book now</a>
-                <ul class="bx-links">
-                  <li><a href="room-details.html" title=""><i class="fa fa-wifi"></i></a></li>
-                  <li><a href="room-details.html" title=""><i class="fa fa-bed"></i></a></li>
-                  <li><a href="room-details.html" title=""><i class="fa fa-bath"></i></a></li>
-                  <li><a href="room-details.html" title=""><i class="fa fa-shower"></i></a></li>
-                </ul>
-              </div>
-            </div>
+            <% }); %>
           </div>
-      <% }); %>
+          
+        </div>
+        
         
         <!-- room-block -->
         <!-- <div class="room-block col-lg-6 col-md-6 col-sm-12">

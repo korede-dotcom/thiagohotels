@@ -140,6 +140,18 @@ const clientRoomAvailable = asynchandler(async (req, res) => {
     return res.render('room-details', { totalRooms: totalRooms,name:"ddd",selectedRoomNumber:selectedRoomNumber,start:start,end:end });
 });
 
+const clientRoom = asynchandler(async (req, res) => {
+    const { id } = req.query;
+
+    // Room.belongsTo(RoomNumber,{foreignKey:'_id',targetKey:"category_id" });
+
+    const category = await Room.findOne({where:{_id:id}});
+    const count = await RoomNumber.count({where:{category_id:id}});
+
+    return res.render('room-details-one', { category: category.dataValues,count});
+});
+
+
 
 
 
@@ -483,7 +495,8 @@ module.exports = {
     GetAvailability,
     clientRoomAvailable,
     paymentResult,
-    GetAvailabilityToday
+    GetAvailabilityToday,
+    clientRoom
 };
 
 

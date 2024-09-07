@@ -7,19 +7,33 @@
 						<div class="col">
 							<div class="mt-5">
 								<h4 class="card-title float-left mt-2">Appointments</h4>
-                                <a href="/add-booking" class="btn btn-primary float-right veiwbutton ">Add Booking</a>
+                                <a href="/portal/add-booking" class="btn btn-primary float-right veiwbutton ">Add Booking</a>
                             </div>
 						</div>
 					</div>
 				</div>
+				
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="card card-table">
 							<div class="card-body booking_card">
 								<div class="table-responsive">
 									<table class="datatable table table-stripped table table-hover table-center mb-0">
+										<div class="top-nav-search">
+											<form method="get" action="/portal/all-booking">
+												<% if (Object.keys(query).length > 0) { %>
+													<a href="/portal/all-booking">see all bookings</a>
+												  <% } %>
+												<div class="input-group">
+												  <input type="text" class="form-control" name="room_number" placeholder="Search here" required>
+												  <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+												</div>
+											  </form>
+											  
+										</div>
 										<thead>
 											<tr>
+												<th>S/N</th>
 												<th>Booking ID</th>
 												<th>Name</th>
 												<th>Room Name</th>
@@ -38,9 +52,9 @@
 											</tr>
 										</thead>
 										<tbody>
-											<% bookings.map(element => { %>
+											<% bookings.map((element,i) => { %>
 												<tr>
-													
+													<td><%= i + 1 %></td>
 													<td>
 														<a href="/portal/check-in?key=<%= element.reference_id %>">
 
@@ -49,10 +63,10 @@
 													</td>
 													<td>
 														<h2 class="table-avatar">
-														<a href="profile.html" class="avatar avatar-sm mr-2">
+														<a href="/portal/check-in?key=<%= element.reference_id %>" class="avatar avatar-sm mr-2">
 															<!-- <img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-03.jpg" alt="User Image"> -->
 														</a>
-														<a href="profile.html"><%= element.guest_name %> <span>#0001</span></a>
+														<a href="/portal/check-in?key=<%= element.reference_id %>"><%= element.guest_name %> <span>#0001</span></a>
 														</h2>
 													</td>
 													<td><%= element.room_name%></td>

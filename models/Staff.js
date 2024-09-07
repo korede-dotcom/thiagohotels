@@ -2,38 +2,33 @@ const { Sequelize, DataTypes } = require('sequelize');
 const connectDb = require("../config/connectDB");
 const sequelize = connectDb;
 
-const RoomNumber = sequelize.define('roomnumber', {
+const Staff = sequelize.define('staff', {
   _id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     foreignKey: true,
     autoIncrement: true,
   },
-  category_id: {
-    type: Sequelize.INTEGER,
+  user_id:{
+    type: Sequelize.UUID,
     allowNull: false,
   },
-  room_name:{
-    type: Sequelize.STRING,
+  phonenumber: {
+    type: DataTypes.STRING,
     allowNull: false,
-    unique:true,
   },
-  room_number: {
-    type: Sequelize.STRING,
+  address: {
+    type: DataTypes.STRING,
     allowNull: false,
-    unique:true,
   },
   status:{
     type:DataTypes.BOOLEAN,
-    defaultValue:false
+    defaultValue:true
   }
-
-
- 
 });
 
 
 
-RoomNumber.sync({alter:true});
+Staff.sync({alter:true});
 
-module.exports = RoomNumber;
+module.exports = Staff;

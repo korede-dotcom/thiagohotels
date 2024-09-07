@@ -6,7 +6,7 @@
 					<div class="row align-items-center">
 						<div class="col">
 							<div class="mt-5">
-								<h4 class="card-title float-left mt-2">All Rooms</h4> <a href="/portal/add-room-category" class="btn btn-primary float-right veiwbutton">Add Room category</a> </div>
+								<h4 class="card-title float-left mt-2">All Room Categories</h4> <a href="/portal/add-room-category" class="btn btn-primary float-right veiwbutton">Add Room category</a> </div>
 						</div>
 					</div>
 				</div> 
@@ -53,7 +53,7 @@
 																<i class="fas fa-ellipsis-v ellipse_color"></i>
 															</a>
 															<div class="dropdown-menu dropdown-menu-right">
-																<a class="dropdown-item" href="edit-room.html">
+																<a class="dropdown-item" href="/portal/room-category?id=<%= result._id %>">
 																	<i class="fas fa-pencil-alt m-r-5"></i> Edit
 																</a>
 																<a class="dropdown-item delete-btn" href="#" data-toggle="modal" data-target="#delete_asset" data-id="<%= result._id %>">

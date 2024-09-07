@@ -178,6 +178,12 @@ class RoomRepository {
     return categories;
     
   }
+  async categoryById(id) {
+    const categories = await Room.findOne({where: {_id: id}})
+    
+    return categories;
+    
+  }
   async deletecategory(id) {
     const categories = await Room.destroy({where: {_id: id}})
     console.log("🚀 ~ RoomRepository ~ deletecategory ~ categories:", categories)

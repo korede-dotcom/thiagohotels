@@ -5,6 +5,8 @@ const expressAsyncHandler = require("express-async-handler");
 const HotelBooking = require("../models/HotelBooking");
 const moment = require('moment');
 const RoomNumber = require("../models/RoomNumbers");
+const {Sequelize,Op} = require('sequelize');
+const SendEmail = require("../utils/sendEmail");
 // const todoControl = require("../controllers/Todo")
 // const allowedUser = require("../middleware/Authorization")
 // const {todoListValidationRules} = require("../middleware/validator")
@@ -21,8 +23,84 @@ const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY; // Get your API key
 
 
 routes.post('/paystack/initialize/reception', expressAsyncHandler( async (req, res) => {
-  const { category_id, start, end, mode } = req.body;
-  console.log(req.body);
+  const { category_id, start, end, mode,room_number } = req.body;
+  console.log("🚀 ~ routes.post ~ req.body:", req.body)
+
+  const currentDate = moment().format("YYYY-MM-DD");
+
+  // Parse the start date
+  let startDatee = moment(start, "DD-MM-YYYY").format("YYYY-MM-DD");
+  console.log("🚀 ~ routes.post ~ startDatee:", startDatee)
+
+  // Check if the start date is in the past
+  if (moment(start).isBefore(currentDate)) {
+      return res.json({
+          message: "Start date cannot be in the past. Please select a valid date.",
+          status: false
+      });
+  }
+
+  // Parse the end date
+  const endDatee = moment(end, "DD-MM-YYYY").format("YYYY-MM-DD");
+
+  const bookedRooms = await HotelBooking.findOne({
+    where: {
+        category_id,
+        status:"success",
+        room_number,
+        [Op.or]: [
+            {
+                start: {
+                    [Op.between]: [
+                        Sequelize.literal(`TO_TIMESTAMP('${start} 12:00:00+01', 'YYYY-MM-DD HH24:MI:SS')`),
+                        Sequelize.literal(`TO_TIMESTAMP('${end} 12:00:00+01', 'YYYY-MM-DD HH24:MI:SS')`)
+                    ]
+                }
+            },
+            {
+                end: {
+                    [Op.between]: [
+                        Sequelize.literal(`TO_TIMESTAMP('${start} 12:00:00+01', 'YYYY-MM-DD HH24:MI:SS')`),
+                        Sequelize.literal(`TO_TIMESTAMP('${end} 12:00:00+01', 'YYYY-MM-DD HH24:MI:SS')`)
+                    ]
+                }
+            },
+            {
+                [Op.and]: [
+                    {
+                        start: {
+                            [Op.lte]: Sequelize.literal(`TO_TIMESTAMP('${start} 12:00:00+01', 'YYYY-MM-DD HH24:MI:SS')`)
+                        }
+                    },
+                    {
+                        end: {
+                            [Op.gte]: Sequelize.literal(`TO_TIMESTAMP('${end} 12:00:00+01', 'YYYY-MM-DD HH24:MI:SS')`)
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+});
+
+// if (bookedRooms > 0) {
+//   return res.json({
+//     message: "Start date cannot be in the past. Please select a valid date.",
+//     status: false
+// });
+// }
+if (bookedRooms) {
+  return res.json({
+    message: `this room ${bookedRooms.dataValues.room_number} has been booked online since ${new Date(bookedRooms.dataValues.createdAt).toDateString()} for today ${new Date(bookedRooms.dataValues.start).toDateString()} till ${new Date(bookedRooms.dataValues.end).toDateString()} here is the refrence ${bookedRooms.dataValues.reference_id}`,
+    reference_id: bookedRooms.dataValues.reference_id,
+    status: false
+  });
+}
+
+
+console.log(bookedRooms);
+  console.log("🚀 ~ routes.post ~ availableRoomDetails:", bookedRooms)
+
   
   function parseDate(dateStr) {
     const [year, month, day] = dateStr.split('-').map(Number);
@@ -89,13 +167,15 @@ routes.post('/paystack/initialize/reception', expressAsyncHandler( async (req, r
       if(!response.data.data.authorization_url){
         return res.status(400).json({message: 'Failed to initialize payment',status:false});
       }
-      const sortNumber = '0' + req.body.guest_phone.toString().substring(1);
+      const sortNumber = req.body.guest_phone.toString().substring(1);
     const formattedNumber = '234' + sortNumber;
     console.log(formattedNumber);
-    const msg = `Your booking has been initiated please make payments here link:${response.data.data.authorization_url}`;
-      const sendSms = await axios.get(`${process.env.smsUrl}?user=${process.env.smsusername}&pass=${process.env.smspassword}&to=${formattedNumber}&from=${process.env.smsFrom}&msg=${msg}`)
+    // const msg = `Your booking has been initiated please make payments here link:${response.data.data.authorization_url}`;
+    //   const sendSms = await axios.get(`${process.env.smsUrl}?user=${process.env.smsusername}&pass=${process.env.smspassword}&to=${formattedNumber}&from=${process.env.smsFrom}&msg=${msg}`)
+
+    //   SendEmail("heelo",'hiii',msg,'korede@tm30.net');
   
-      console.log("🚀 ~ routes.post ~ sendSms:", sendSms)
+      // console.log("🚀 ~ routes.post ~ sendSms:", sendSms)
       res.status(200).json({
         status: true,
         message: 'Payment initialized successfully',
@@ -111,6 +191,8 @@ routes.post('/paystack/initialize/reception', expressAsyncHandler( async (req, r
               booked_from:'reception',
               booked_by:req.body.guest_name,    
       });
+
+
     console.log("🚀 ~ routes.post ~ saveData:", saveData)
    return;
     
@@ -163,6 +245,7 @@ const formattedDate = momentDate.set({hour: 1, minute: 0, second: 0}).format('YY
         {
           email:req.body.guest_email,
           amount: totalCost * 100 , // Convert to kobocallback_url: "http://localhost:3200/paystack/webhook",
+          // channels: ['bank_transfer'], 
           metadata: {
             // products: JSON.stringify(totals),
             products: {
@@ -277,6 +360,8 @@ const formattedDate = momentDate.set({hour: 1, minute: 0, second: 0}).format('YY
     res.locals.trnx = {
       ...event.data.metadata.products.details,reference_id:event.data.reference,status:status
     }
+
+
     const saveBookings = await HotelBooking.update(
       { status: status }, 
       { where: { reference_id: event.data.reference } }

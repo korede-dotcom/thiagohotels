@@ -197,6 +197,25 @@ button:hover {
     outline: none;
 }
 
+#roomModal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Width of the modal */
+}
 
 
 
@@ -226,9 +245,11 @@ button:hover {
     >
         <i class="fas <%= element.status ? 'fa-key' : 'fa-door-open' %>"></i>
         <div class="room-info">
-            <h2>Room <%= element.room_number %></h2>
-            <p><%= element.room_name %></p>
+            <h2>Room <%= element.room_number %> </h2>
+            <p id="price"></p>
+            <p><%= element.room_name %></p> 
             <p class="status"><%= element.status ? 'Booked' : 'Available' %></p>
+            
         </div>
     </div>
 <% }) %>
@@ -241,7 +262,7 @@ button:hover {
         <p id="modalRoomName"></p>
         <p id="modalRoomStatus"></p>
 		
-		<form id="payment_form" name="contact_form" class="">
+		<form id="payment_form" name="contact_form" class="show">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Check In</label>
@@ -284,6 +305,7 @@ button:hover {
 		<span class="loader"></span>
 		Submit
 	</button>
+    <div id="paymentContainer"></div>
 </div>
 
 
@@ -306,245 +328,179 @@ button:hover {
 	<script src="assets/plugins/raphael/raphael.min.js"></script>
 	<script src="assets/js/script.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-	<script>
-// Function to open the modal
-// Function to open the modal
-let room_id , room_name,room_number;
-function openModal(roomNumber, roomName, roomStatus,roomId) {
-    const modal = document.getElementById('roomModal');
-    const modalContent = document.querySelector('.modal-content');
-    room_id = roomId,
-	room_name = roomName;
-	room_number = roomNumber;
-    // Set modal content
-    document.getElementById('modalRoomNumber').innerText = "Room " + roomNumber;
-    document.getElementById('modalRoomName').innerText = roomName;
-    document.getElementById('modalRoomStatus').innerText = roomStatus;
-
-    
-    // Show the modal
-    modal.style.display = "flex";
-}
-
-// Function to close the modal
-function closeModal() {
-    const modal = document.getElementById('roomModal');
-    modal.style.display = "none";
-}
-
-// Optional: Close the modal if the user clicks outside the modal content
-window.onclick = function(event) {
-    const modal = document.getElementById('roomModal');
-    if (event.target === modal) {
-        closeModal();
-    }
-}
-
-// Optional: Ensure modal is hidden when the page loads
-document.addEventListener("DOMContentLoaded", function() {
-    const modal = document.getElementById('roomModal');
-    modal.style.display = "none";
-
-	function formatDate(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-
-        // Set today's date and tomorrow's date as default values
-		function setDefaultDates() {
-					const today = new Date();
-					const tomorrow = new Date();
-					tomorrow.setDate(today.getDate() + 1);
-		
-					const checkInInput = document.getElementById('checkIn');
-					const checkOutInput = document.getElementById('checkOut');
-		
-					// Set default values
-					checkInInput.value = formatDate(today);
-					checkOutInput.value = formatDate(tomorrow);
-		
-					// Add placeholder text
-					checkInInput.setAttribute('aria-placeholder', 'Arrive Date');
-					checkOutInput.setAttribute('aria-placeholder', 'Departure Date');
-				}
-		
-				// Set default dates when the page loads
-				document.addEventListener('DOMContentLoaded', setDefaultDates);
-
-
-    document.getElementById('submit_button').addEventListener('click',async  function(event) {
-        // Prevent form submission if validation fails
-        event.preventDefault();
-
-        // Get values from input fields
-        const checkInDate = document.getElementById('checkIn').value;
-        const checkOutDate = document.getElementById('checkOut').value;
-        const guestName = document.querySelector('input[name="guest_name"]').value;
-        const guestPhone = document.querySelector('input[name="guest_phone"]').value;
-        const guestEmail = document.querySelector('input[name="guest_email"]').value;
-        const guestAddress = document.querySelector('input[name="guest_address"]').value;
-        const paymentmode = document.querySelector('select[name="paymentmode"]').value;
-		const loader = document.querySelector('.loader');
-		const submitButton = document.getElementById('submit_button');
-	
-
-
-		loader.style.display = 'inline-block';
-            submitButton.disabled = true;
-
-        // Validate that none of the fields are empty
-        if (!checkInDate || !checkOutDate || !guestName || !guestPhone || !guestEmail || !guestAddress) {
-			
-					Toastify({
-					text: "Please fill out all fields.",
-					duration: 3000,
-					destination: "https://github.com/apvarun/toastify-js",
-					newWindow: true,
-					close: true,
-					gravity: "top", // `top` or `bottom`
-					position: "center", // `left`, `center` or `right`
-					stopOnFocus: true, // Prevents dismissing of toast on hover
-					style: {
-						background: "red",
-					},
-					onClick: function(){} // Callback after click
-					}).showToast();
-					loader.style.display = 'none';
-					submitButton.disabled = false;
-					return
-			
-        }
-
-        // Validate that check-in date is before check-out date
-        if (new Date(checkInDate) >= new Date(checkOutDate)) {
+    <script>
+        // Function to open the modal
+        let room_id, room_name, room_number;
+      
         
-
-			Toastify({
-					text: "Check-out date must be after check-in date.",
-					duration: 3000,
-					destination: "https://github.com/apvarun/toastify-js",
-					newWindow: true,
-					close: true,
-					gravity: "top", // `top` or `bottom`
-					position: "center", // `left`, `center` or `right`
-					stopOnFocus: true, // Prevents dismissing of toast on hover
-					style: {
-						background: "red",
-					},
-					onClick: function(){} // Callback after click
-					}).showToast();
-					loader.style.display = 'none';
-					submitButton.disabled = false;
-					return
+        // Function to open the modal when a room is clicked
+        function openModal(roomNumber, roomName, roomStatus, roomId) {
+            const modal = document.getElementById('roomModal');
+            room_id = roomId;
+            room_name = roomName;
+            room_number = roomNumber;
+        
+            // Set modal content
+            document.getElementById('modalRoomNumber').innerText = "Room " + roomNumber;
+            document.getElementById('modalRoomName').innerText = roomName;
+            document.getElementById('modalRoomStatus').innerText = roomStatus;
+        
+            // Show the modal
+            modal.style.display = "flex";
         }
-
-        // Validate email format
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(guestEmail)) {
-			Toastify({
-					text: "Please enter a valid email address.",
-					duration: 3000,
-					destination: "https://github.com/apvarun/toastify-js",
-					newWindow: true,
-					close: true,
-					gravity: "top", // `top` or `bottom`
-					position: "center", // `left`, `center` or `right`
-					stopOnFocus: true, // Prevents dismissing of toast on hover
-					style: {
-						background: "red",
-					},
-					onClick: function(){} // Callback after click
-					}).showToast();
-					loader.style.display = 'none';
-					submitButton.disabled = false;
-					return
-			
+        
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById('roomModal');
+            modal.style.display = "none";
         }
+        
+        // Ensure modal is hidden when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById('roomModal');
+            modal.style.display = "none"; // Hide modal on page load
 
-        // All validations passed
-        console.log('Check In Date:', checkInDate);
-        console.log('Check Out Date:', checkOutDate);
-        console.log('Guest Name:', guestName);
-        console.log('Guest Phone:', guestPhone);
-        console.log('Guest Email:', guestEmail);
-        console.log('Guest Address:', guestAddress);
-		const url = new URL(window.location.href);
-		const id = url.searchParams.get('id');
-		const cate_name = url.searchParams.get('cat_id');
-		let payload = {
-			start:checkInDate, // Start
-			end:checkOutDate, // End
-			guest_name:guestName,
-			guest_email:guestEmail,
-			guest_phone:guestPhone,
-			guest_address:guestAddress,
-			mode:paymentmode,
-			category_id:id,
-			room_id:room_id,
-			room_name:room_name,
-			room_number:room_number,
-            category_id:id,  // Category ID (assuming it's the same as room ID for simplicity)
-			category_name:cate_name,
-		}
-
-console.log("🚀 ~ room_id , room_name,room_number:", room_id , room_name,room_number,payload)
-
-
-
-		const response = await fetch("/payments/paystack/initialize/reception",{
-			method: 'POST',
-			headers: {
-				"content-type": "application/json",
-			},
-			body: JSON.stringify(payload)
-		})
-		const data = await response.json();
-	
-			if (!data.status) {
-				Toastify({
-						text: "error initializing payment for booking",
-						duration: 3000,
-						destination: "https://github.com/apvarun/toastify-js",
-						newWindow: true,
-						close: true,
-						gravity: "top", // `top` or `bottom`
-						position: "center", // `left`, `center` or `right`
-						stopOnFocus: true, // Prevents dismissing of toast on hover
-						style: {
-							background: "red",
-						},
-						onClick: function(){} // Callback after click
-						}).showToast();
-						loader.style.display = 'none';
-						submitButton.disabled = false;
-						return
-			}
-			loader.style.display = 'none';
-						submitButton.disabled = false;
-		
-			// Redirect to Paystack payment page
-			// window.location.href = data.data.authorization_url;
-            // loader.style.display = 'none';
-            // submitButton.disabled = false;
-            // Add code to handle successful payment and redirect to booking success page
-    });    
-});
-
-
-
-
-
-
-
-	// $(function() {
-	// 	$('#datetimepicker3').datetimepicker({
-	// 		format: 'LT'
-	// 	});
-	// });
-	</script>
+            const url = new URL(window.location.href);
+                const pr = url.searchParams.get('price');
+                document.querySelector('#price').innerText = `#${pr}`
+        
+            // Pre-fill the check-in and check-out dates
+            function formatDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+        
+            // Set today's date and tomorrow's date as defaults
+            function setDefaultDates() {
+                const today = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(today.getDate() + 1);
+        
+                document.getElementById('checkIn').value = formatDate(today);
+                document.getElementById('checkOut').value = formatDate(tomorrow);
+            }
+        
+            setDefaultDates(); // Initialize default dates
+        
+            // Form submission event listener
+            document.getElementById('submit_button').addEventListener('click', async function(event) {
+                event.preventDefault(); // Prevent default form submission
+        
+                // Get form values
+                const checkInDate = document.getElementById('checkIn').value;
+                const checkOutDate = document.getElementById('checkOut').value;
+                const guestName = document.querySelector('input[name="guest_name"]').value;
+                const guestPhone = document.querySelector('input[name="guest_phone"]').value;
+                const guestEmail = document.querySelector('input[name="guest_email"]').value;
+                const guestAddress = document.querySelector('input[name="guest_address"]').value;
+                const paymentmode = document.querySelector('select[name="paymentmode"]').value;
+        
+                const loader = document.querySelector('.loader');
+                const submitButton = document.getElementById('submit_button');
+        
+                // Show loader and disable button
+                loader.style.display = 'inline-block';
+                submitButton.disabled = true;
+        
+                // Validate fields
+                if (!checkInDate || !checkOutDate || !guestName || !guestPhone || !guestEmail || !guestAddress) {
+                    showToast("Please fill out all fields.", "red");
+                    loader.style.display = 'none';
+                    submitButton.disabled = false;
+                    return;
+                }
+        
+                // Check-in date must be before check-out date
+                if (new Date(checkInDate) >= new Date(checkOutDate)) {
+                    showToast("Check-out date must be after check-in date.", "red");
+                    loader.style.display = 'none';
+                    submitButton.disabled = false;
+                    return;
+                }
+        
+                // Validate email format
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(guestEmail)) {
+                    showToast("Please enter a valid email address.", "red");
+                    loader.style.display = 'none';
+                    submitButton.disabled = false;
+                    return;
+                }
+        
+                // Prepare payload for backend
+                // const url = new URL(window.location.href);
+                const id = url.searchParams.get('id');
+                const cate_name = url.searchParams.get('cat_id');
+        
+                let payload = {
+                    start: checkInDate,
+                    end: checkOutDate,
+                    guest_name: guestName,
+                    guest_email: guestEmail,
+                    guest_phone: guestPhone,
+                    guest_address: guestAddress,
+                    mode: paymentmode,
+                    category_id: id,
+                    room_id: room_id,
+                    room_name: room_name,
+                    room_number: room_number,
+                    category_name: cate_name,
+                };
+        
+                // Make the API call to initialize Paystack payment
+                const response = await fetch("/payments/paystack/initialize/reception", {
+                    method: 'POST',
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+        
+                const data = await response.json();
+        
+                // Hide loader and enable button
+                loader.style.display = 'none';
+                submitButton.disabled = false;
+        
+                if (!data.status) {
+                    showToast(data.message, "red");
+                    return;
+                }
+        
+                // Load Paystack authorization URL in iframe for "Generate-Bank-Transfer"
+                if (paymentmode === "Generate-Bank-Transfer" && data.data.authorization_url) {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = data.data.authorization_url;
+                    iframe.width = "100%";
+                    iframe.height = "700px"; // Adjust the height as necessary
+                    iframe.frameBorder = "0";
+                    const paymentContainer = document.getElementById('paymentContainer');
+                    paymentContainer.innerHTML = ''; // Clear any previous content
+                    paymentContainer.appendChild(iframe); // Load the iframe
+                    document.querySelector(".show").style.display = "none";
+                    document.getElementById('modalRoomNumber').style.display = "none";
+            document.getElementById('modalRoomName').style.display = "none";
+            document.getElementById('modalRoomStatus').style.display = "none";
+            submitButton.style.display = "none";
+            
+                } else {
+                    showToast("paymentlink sent to customers email and phonenumber", "green");
+                }
+            });
+        });
+        
+        // Helper function to show toast notifications
+        function showToast(message, color) {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                style: { background: color },
+            }).showToast();
+        }
+        </script>
+        
 </body>
 
 </html>

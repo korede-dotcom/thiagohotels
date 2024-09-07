@@ -14,6 +14,7 @@ routes.get("/event/pkg",managerControl.active)
         .post("/book/event",managerControl.bookForClient)
         .post("/check-availability",Hotel.GetAvailability)
         .get("/available-rooms",Hotel.clientRoomAvailable)
+        .get("/rooms",Hotel.clientRoom)
         .get("/result",Hotel.paymentResult)
         // .post("/bookroom",protect ,checkHotelStatus,hotemanagerControl.bookRoom)
 

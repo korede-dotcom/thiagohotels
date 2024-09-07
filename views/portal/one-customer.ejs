@@ -44,14 +44,19 @@
 										</thead>
 										<tbody>
 											<% bookings.map(element => { %>
-												<tr>
-													<td><%= element.reference_id %></td>
+												<tr >
+													<td>
+														<a href="/portal/check-in?key=<%= element.reference_id %>">
+															<%= element.reference_id %>
+
+														</a>
+													</td>
 													<td>
 														<h2 class="table-avatar">
-														<a href="profile.html" class="avatar avatar-sm mr-2">
+														<a  class="avatar avatar-sm mr-2">
 															<!-- <img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-03.jpg" alt="User Image"> -->
 														</a>
-														<a href="profile.html"><%= element.guest_name %> <span>#0001</span></a>
+														<a ><%= element.guest_name %> </a>
 														</h2>
 													</td>
 													<td><%= element.room_name%></td>

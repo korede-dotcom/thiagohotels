@@ -41,8 +41,11 @@
 												<!-- <td>BKG-0001</td> -->
 												<td>
 													<h2 class="table-avatar">
-                                                    <a href="profile.html" class="avatar avatar-sm mr-2"></a>
-                                                    <a href="profile.html"><%=element.guest_name%><span>#<%=element.success_count%></span></a>
+                                                    <a href="/portal/all-customer?email=<%=element.guest_email%>&name=<%=element.guest_name%>" class="avatar avatar-sm mr-2">
+
+													</a>
+                                                    <a href="/portal/all-customer?email=<%=element.guest_email%>&name=<%=element.guest_name%>">
+														<%=element.guest_name%><span>#<%=element.success_count%></span></a>
                                                     </h2>
                                                 </td>
 												<td><%=element.guest_email%></td>

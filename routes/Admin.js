@@ -9,7 +9,10 @@ const RoomRepo = require("../repos/Room-repo");
 const { QueryTypes, Sequelize, where } = require('sequelize');
 const Room = require("../models/Room");
 const PaymentMode = require("../models/PaymentMode");
-
+const Staff = require("../models/Staff");
+const User = require("../models/User");
+const connectDB = require("../config/connectDB");
+const bcrypt = require("bcryptjs");
 
 routes.get("/",async (req,res) => {
             res.render('login', {
@@ -51,8 +54,40 @@ routes.get("/room-category",checkAuthCookie,async (req,res) => {
                   });
       
       }
+      if(req.query.id) {
+           
+            const categories = await RoomRepo.categoryById(req.query.id)
+                return  res.render('edit-room-category', {
+                    name: req.user.name ,
+                    email: req.user.email ,
+                    roleName:req.user.roleName,
+                    categories:categories
+                  });
+      
+      }
       const categories = await RoomRepo.roomCategorys()
             res.render('roomcategory', {
+              name: req.user.name ,
+              email: req.user.email ,
+              roleName:req.user.roleName,
+              categories:categories
+            });
+      })
+routes.get("/edit-room-category",checkAuthCookie,async (req,res) => {
+      // if(req.query.type === "delete" && req.query.id) {
+      //       const catego = await RoomRepo.deletecategory(req.query.id)
+      //       console.log("🚀 ~ routes.get ~ catego:", catego)
+      //       const categories = await RoomRepo.roomCategorys()
+      //           return  res.render('roomcategory', {
+      //               name: req.user.name ,
+      //               email: req.user.email ,
+      //               roleName:req.user.roleName,
+      //               categories:categories
+      //             });
+      
+      // }
+      const categories = await RoomRepo.roomCategorys()
+            res.render('edit-room-category', {
               name: req.user.name ,
               email: req.user.email ,
               roleName:req.user.roleName,
@@ -126,6 +161,25 @@ OFFSET
       })
 
 routes.get("/all-booking",checkAuthCookie,async (req, res) => {
+      if (req.query.room_number) {
+            const bookings = await HotelBooking.findAll({
+                  where: {
+                    room_number: req.query.room_number,
+                    status:"success"
+                  },
+                  order: [
+                    ['id', 'DESC']
+                  ]
+                });
+                
+      
+            return res.render('all-booking', {
+                  name: req.user.name ,
+                  email: req.user.email ,
+                  roleName:req.user.roleName,
+                  bookings:bookings,
+                }) 
+      }
       const bookings = await HotelBooking.findAll({order: [['id', 'DESC']]})
       
       res.render('all-booking', {
@@ -136,6 +190,7 @@ routes.get("/all-booking",checkAuthCookie,async (req, res) => {
           })
 })
 routes.get("/add-booking",checkAuthCookie,async (req, res) => {
+
       if(req.query.id && req.query.cat_id){
             const bookings = await HotelBooking.findAll({order: [['id', 'DESC']]})
             const categories = await RoomRepo.roomNumber(req.query.id)
@@ -151,6 +206,7 @@ routes.get("/add-booking",checkAuthCookie,async (req, res) => {
                   
             })
       }
+
       const bookings = await HotelBooking.findAll({order: [['id', 'DESC']]})
       const categories = await RoomRepo.roomCategorys()
 //      const categories = await 
@@ -239,7 +295,7 @@ routes.post("/check-in", checkAuthCookie, expressAsyncHandler( async (req, res) 
           });
           console.log("🚀 ~ routes.get ~ distinctCustomer:", distinctCustomer)
           
-      res.render('all-customer', {
+     return res.render('all-customer', {
         name: req.user.name,
         email: req.user.email,
         roleName: req.user.roleName,
@@ -269,6 +325,84 @@ routes.post("/check-in", checkAuthCookie, expressAsyncHandler( async (req, res) 
             paymentmode:findPaymentMode
       })
   }))
+
+  routes.get("/all-staff",checkAuthCookie,expressAsyncHandler(async (req, res) => {
+      // if (req.query.id && req.query.status) {
+      //   const updateRoomCategory = await RoomCategory.update({status:req.query.status},{where: {_id: req.query.id}})
+      //   if (updateRoomCategory) {
+      //       const findRoomCategory = await RoomCategory.findAll()
+      //       console.log("��� ~ routes.get ~ findRoomCategory:", findRoomCategory)
+      //       return res.render('room-category', {
+      //             name: req.user.name,
+      //             email: req.user.email,
+      //             roleName: req.user.roleName,
+      //             roomcategories:findRoomCategory
+      //       })
+      //   }
+      // }
+      // const findRoomCategory = await RoomCategory.findAll()
+      Staff.belongsTo(User,{foreignKey:"user_id"})
+      const staffs = await Staff.findAll({include:{model:User}})
+      staffs.forEach(user => console.log(user.user.name))
+      // console.log("🚀 ~ routes.get ~ staffs:", staffs)
+      return res.render('all-staff', {
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+            staffs:staffs
+         
+      })
+}))
+  routes.get("/edit-staff",checkAuthCookie,expressAsyncHandler(async (req, res) => {
+     
+      return res.render('edit-staff', {
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+         
+      })
+}))
+routes.get("/add-staff",checkAuthCookie,expressAsyncHandler(async (req, res) => {
+ 
+      return res.render('add-staff', {
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+       
+      })
+}))
+
+routes.post("/add-staff",checkAuthCookie,expressAsyncHandler(async (req, res) => {
+      let transaction
+      transaction = await connectDB.transaction()
+      console.log("🚀 ~ routes.post ~ req.body:", req.body)
+      const saveUser = await User.create({
+            name: req.body.first + " " + req.body.last,
+            email: req.body.email,
+            password: await bcrypt.hash("fileopen", 10),
+            role_id: parseInt(req.body.role),
+            
+
+      },{transaction})
+      const saveStaff = await Staff.create({
+            user_id: saveUser._id,
+            phonenumber: req.body.phonenumber,
+            address: req.body.address,
+            // designation: req.body.designation,
+      },{transaction})
+      await transaction.commit()
+      return res.status(201).json({
+            status: true,
+            message: 'Staff added successfully',
+            data: saveStaff,
+      })
+
+}))
+
+routes.get("/bar",checkAuthCookie,expressAsyncHandler(async (req,res) => {
+      res.render("barRecent", {})
+}))
+
 
 
 module.exports = routes
