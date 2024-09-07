@@ -11,6 +11,7 @@
                             </div>
 						</div>
 					</div>
+				
 				</div>
 				
 				<div class="row">
@@ -19,17 +20,19 @@
 							<div class="card-body booking_card">
 								<div class="table-responsive">
 									<table class="datatable table table-stripped table table-hover table-center mb-0">
+										
 										<div class="top-nav-search">
+
 											<form method="get" action="/portal/all-booking">
-												<% if (Object.keys(query).length > 0) { %>
-													<a href="/portal/all-booking">see all bookings</a>
-												  <% } %>
+											
 												<div class="input-group">
 												  <input type="text" class="form-control" name="room_number" placeholder="Search here" required>
 												  <button class="btn" type="submit"><i class="fas fa-search"></i></button>
 												</div>
+												<a id="goBackButton" style="display: none;float: right; color: #94081a;" onclick="window.location.href='/portal/all-booking';">Go Back to all bookimgs</a>
+
 											  </form>
-											  
+
 										</div>
 										<thead>
 											<tr>
@@ -150,6 +153,14 @@
 	<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="assets/plugins/raphael/raphael.min.js"></script>
 	<script src="assets/js/script.js"></script>
+	<script>
+		// Check if the query parameter "room_number" exists in the URL
+		const params = new URLSearchParams(window.location.search);
+		if (params.has('room_number')) {
+		  // Show the "Go Back" button if a search was performed
+		  document.getElementById('goBackButton').style.display = 'block';
+		}
+	  </script>
 </body>
 
 </html>

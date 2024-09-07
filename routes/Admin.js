@@ -13,6 +13,8 @@ const Staff = require("../models/Staff");
 const User = require("../models/User");
 const connectDB = require("../config/connectDB");
 const bcrypt = require("bcryptjs");
+const Drink = require("../models/Drinks");
+const DrinkLog = require("../models/Drinks copy");
 
 routes.get("/",async (req,res) => {
             res.render('login', {
@@ -400,7 +402,86 @@ routes.post("/add-staff",checkAuthCookie,expressAsyncHandler(async (req, res) =>
 }))
 
 routes.get("/bar",checkAuthCookie,expressAsyncHandler(async (req,res) => {
-      res.render("barRecent", {})
+      res.render("barRecent", {
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+      })
+}))
+routes.get("/bar-all-drinks",checkAuthCookie,expressAsyncHandler(async (req,res) => {
+     return  res.render("all-drinks", {
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+      })
+}))
+
+// routes.get("/bar/create-drinks",checkAuthCookie,expressAsyncHandler(async(req,res) => {
+//       return  res.render("create-drinks", {
+//             name: req.user.name,
+//             email: req.user.email,
+//             roleName: req.user.roleName,
+//       })
+// }))
+
+routes.post("/bar/create-drinks",checkAuthCookie,expressAsyncHandler(async(req,res) => {
+      console.log("��� ~ routes.post ~ req.body:", req.body)
+      const saveBar = await Drink.create({
+            name: req.body.name,
+            totalStock: req.body.totalStock,
+            price: req.body.price,
+       
+      })
+      return res.status(201).json({
+            status: true,
+            message: 'Drink added successfully',
+            data: saveBar,
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+      })
+}))
+routes.post("/bar/buy-drinks",checkAuthCookie,expressAsyncHandler(async(req,res) => {
+      const transaction = await connectDB.transaction();
+      const {name,quantity,drink_name,amount} = req.body;
+      try {
+        // Find the drink by name
+        const drink = await Drink.findOne({ where: { name: drink_name }, transaction });
+        if (!drink) {
+          throw new Error('Drink not found');
+        }
+    
+        // Update the drink's stock (assuming you have a field like stock in your Drink model)
+        const updatedStock = drink.totalStock - quantity;
+        if (updatedStock < 0) {
+          throw new Error('Insufficient stock');
+        }
+        await drink.update({ stock: updatedStock }, { transaction });
+    
+        // Create a log entry
+        await DrinkLog.create({
+          name: name,
+          amount,
+          drink_name: drink_name,
+          stockAfterTransaction: updatedStock,
+          staff_name: req.user.name,
+        }, { transaction });
+    
+        // Commit the transaction
+        await transaction.commit();
+        return res.status(201).json({
+            status: true,
+            message: 'Drink added successfully',
+            // data: saveBar,
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+      })
+      } catch (error) {
+        // Rollback the transaction in case of an error
+        await transaction.rollback();
+        throw error;
+      }
 }))
 
 
