@@ -31,8 +31,9 @@ app.use(cors());
       { mode: 'Generate-Bank-Transfer', status: true },
       { mode: 'Cash', status: true }
     ];
+    // 0 12 * * *
 
-    cron.schedule('* * * * *', async () => {
+    cron.schedule('* 12 * * *', async () => {
       try {
         const now = new Date();        
         const { Op } = require('sequelize');
@@ -40,13 +41,15 @@ app.use(cors());
         
         const bookings = await HotelBooking.findAll({
           where: {
-            checked_out: false,
+            // checked_out: false,
+            status: 'success',
             end: {
               [Op.gte]: today + 'T00:00:00.000Z',
               [Op.lt]: today + 'T23:59:59.999Z'
             }
           }
         });
+        // console.log("🚀 ~ cron.schedule ~ bookings:", bookings)
         
         
         

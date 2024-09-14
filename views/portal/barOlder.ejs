@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier UI with Customer Name</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+	<link rel="stylesheet" href="assets/css/feathericon.min.css">
+	<link rel="stylehseet" href="https://cdn.oesmith.co.uk/morris-0.5.1.css">
+	<link rel="stylesheet" href="assets/plugins/morris/morris.css">
+	<!-- <link rel="stylesheet" href="assets/css/style.css">  -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 350px;
+            background-color: #94081a;
+            padding: 20px;
+            color: white;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            flex: 1;
+            padding: 10px;
+            background-color: #ab0b1f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tabs button.active {
+            background-color: #94081a;
+            font-weight: bold;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .summary .item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .summary .item button {
+            background: none;
+            border: none;
+            color: #94081a;
+            cursor: pointer;
+        }
+
+        .total-cost {
+            font-size: 1.5em;
+            text-align: right;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .product-card.selected {
+            border: 2px solid #94081a;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+
+        .product-price {
+            color: #94081a;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .button-container {
+            text-align: right;
+        }
+
+        .button-container button {
+            background-color: #94081a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+
+        .button-container button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .customer-name-input {
+            margin-bottom: 20px;
+        }
+
+        .customer-name-input input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .recent-summary-list .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .recent-summary-list .summary-item button {
+            background: none;
+            border: none;
+            color: #94081a;
+            cursor: pointer;
+        }
+        .product-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 2px solid transparent;
+  flex: 1 1 calc(25% - 20px); /* 4 cards per row on large screens */
+  margin: 10px;
+}
+
+.product-card.selected {
+  border: 2px solid #94081a;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-box {
+  background-color: #94081a;
+  color: white;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.product-name {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+.product-info {
+  color: black;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 1200px) {
+  .product-card {
+    flex: 1 1 calc(33.33% - 20px); /* 3 cards per row on medium screens */
+  }
+}
+
+@media (max-width: 992px) {
+  .product-card {
+    flex: 1 1 calc(50% - 20px); /* 2 cards per row on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    flex: 1 1 calc(100% - 20px); /* 1 card per row on mobile phones */
+  }
+
+  .product-box {
+    padding: 15px; /* Reduce padding on smaller screens */
+  }
+
+  .product-name {
+    font-size: 1em; /* Adjust font size */
+  }
+
+  .product-info {
+    font-size: 1.1em; /* Adjust font size */
+  }
+}
+
+/* Ensure the product grid is flexible */
+#product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <!-- <h2>Thiago Hotel Bar</h2> -->
+         <center>
+            <a href="">
+                <img src="assets/img/hotel_logo.png" width="50"  alt="logo">
+            </a>
+         </center>
+        <div class="tabs">
+            <button class="tab-link" data-tab="current-summary">                <small>Thiago Hotel Bar</small>
+            </button>
+            <!-- <button class="tab-link active" data-tab="recent-summary">Recent</button> -->
+        </div>
+        <a style="float: right;color: #fff;text-decoration: none;" href="#">See All records</a>
+        <br/>
+        <br/>
+        <br/>
+        <div class="search-bar">
+            <input type="text" id="product-search" placeholder="Search for products..." oninput="searchProducts()">
+        </div>
+
+        <div class="customer-name-input">
+            <input type="text" id="customer-name" placeholder="Customer Name">
+        </div>
+
+        <div id="current-summary" class="tab-content">
+            <div class="summary" id="cart-list">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+            <div class="total-cost">
+                Total: $<span id="total-cost">0.00</span>
+            </div>
+            <div class="button-container">
+                <button id="save-cart" onclick="saveCart()">Save</button>
+                <button id="clear-cart" onclick="clearCart()">Clear</button>
+            </div>
+        </div>
+
+        <div id="recent-summary" class="tab-content" style="display: none;">
+            <div id="recent-summary-list" class="recent-summary-list">
+                <!-- Recent transactions will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-wrapper">
+			<div class="content container-fluid">
+				<div class="page-header">
+					<div class="row align-items-center">
+						<div class="col">
+							<div class="mt-5">
+								<h4 class="card-title float-left mt-2">Bar Records</h4> 
+								<p href="add-customer.html" class="btn btn-primary float-right veiwbutton">
+									Viewing all records</p> 
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="card card-table">
+							<div class="card-body booking_card">
+								<div class="table-responsive">
+									<form id="filter-form" method="get" action="/portal/bar-records">
+										<div class="row">
+										  <div class="col-md-4">
+											<label for="start">Start Date:</label>
+											<input type="date" id="start" name="start" class="form-control" required>
+										  </div>
+										  <div class="col-md-4">
+											<label for="end">End Date:</label>
+											<input type="date" id="end" name="end" class="form-control" required>
+										  </div>
+										  <div class="col-md-4">
+											<label>&nbsp;</label>
+											<button type="submit" class="btn btn-primary btn-block">Filter</button>
+											<a style="color: #94081a;float: right;" href="/portal/bar-records">see all</a>
+										</div>
+										
+										</div>
+									  </form>
+									<table class="datatable table table-stripped table table-hover table-center mb-0">
+										  
+									
+										  
+										<thead>
+											<tr>
+												<!-- <th>Booking ID</th> -->
+												<th>Drink Name</th>
+												<th>customerName</th>
+												<th>Amount</th>
+												<th>quantity</th>
+												<th>stockAfterTransaction</th>
+												<th>Sold by</th>
+											
+											</tr>
+										</thead>
+										<tbody>
+											<% logs.map(element => { %>
+											<tr>
+												<!-- <td>BKG-0001</td> -->
+												<td>
+													<h2 class="table-avatar">
+														<%= element.drink_name %>
+                                                    </h2>
+                                                </td>
+												<td>
+													<h2 class="table-avatar">
+														<%= element.name %>
+                                                    </h2>
+                                                </td>
+												<td>#<%=element.amount%></td>
+												<td><%=element.quantity%></td>
+												<!-- <td>10</td> -->
+												<td><%=element.stockAfterTransaction%></td>
+												<td><%=element.staff_name%></td>
+											
+											</tr>
+											<% }) %>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="delete_asset" class="modal fade delete-modal" role="dialog">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-body text-center"> <img src="assets/img/sent.png" alt="" width="50" height="46">
+							<h3 class="delete_class">Are you sure want to delete this Asset?</h3>
+							<div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+								<button type="submit" class="btn btn-danger">Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+
+    <script data-cfasync="false" src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+	<script src="assets/js/jquery-3.5.1.min.js"></script>
+	<script src="assets/js/popper.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/plugins/raphael/raphael.min.js"></script>
+	<script src="assets/plugins/morris/morris.min.js"></script>
+	<script src="assets/js/chart.morris.js"></script>
+	<script src="assets/js/script.js"></script>
+
+    <!-- <script>
+        const cart = [];
+        const recentSummaries = [
+            { id: 1, customerName: "John Doe", total: 100.00, date: "2024-09-01" },
+            { id: 2, customerName: "Jane Smith", total: 150.00, date: "2024-09-02" },
+            // Add more recent summaries as needed
+        ];
+    
+        const parsedProducts = ; 
+        const decodedProducts = parsedProducts.replace(/&#34;/g, '"');
+    
+        // Parse the decoded string into a JavaScript object
+        const products = JSON.parse(decodedProducts);
+    
+        console.log("🚀 ~ parsedProducts:", parsedProducts);
+        console.log("🚀 ~ products:", products);
+    
+        function renderProductGrid(products) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" id="product-${product.id}" onclick="addToCart(${product.id})">
+                    <div class="product-info">
+                        <h3 style="color:#94081a;">${product.name}</h3>
+                        <p>#${product.price.toFixed(2)}</p>
+                        <p>left in stock: ${product.totalStock}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+    
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.product.id === productId);
+    
+            // Toggle product card selection style
+            const productCard = document.getElementById(`product-${productId}`);
+            productCard.classList.toggle('selected');
+    
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ product, quantity: 1 });
+            }
+    
+            updateCart();
+        }
+    
+        function updateCart() {
+            const cartList = document.getElementById('cart-list');
+            const totalCostElem = document.getElementById('total-cost');
+            let total = 0;
+    
+            cartList.innerHTML = cart.map(item => `
+                <div class="item">
+                    <span>${item.product.name} (x${item.quantity})</span>
+                    <button onclick="removeFromCart(${item.product.id})">Remove</button>
+                </div>
+            `).join('');
+    
+            total = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+            totalCostElem.innerText = total.toFixed(2);
+        }
+    
+        function removeFromCart(productId) {
+            const productIndex = cart.findIndex(item => item.product.id === productId);
+            const productCard = document.getElementById(`product-${productId}`);
+            if (productIndex > -1) {
+                cart.splice(productIndex, 1);
+                productCard.classList.remove('selected');
+            }
+            updateCart();
+        }
+    
+        function clearCart() {
+            cart.length = 0; // Empty the cart array
+            document.querySelectorAll('.product-card.selected').forEach(card => card.classList.remove('selected'));
+            updateCart();
+        }
+    
+        function saveCart() {
+            const customerName = document.getElementById('customer-name').value;
+            if (cart.length === 0 || !customerName) {
+                alert('Please add items to the cart and enter the customer name.');
+                return;
+            }
+    
+            const cartData = cart.map(item => ({
+                id: item.product.id,
+                name: item.product.name,
+                quantity: item.quantity,
+                total: (item.product.price * item.quantity).toFixed(2) // Calculate total for each product
+            }));
+    
+            const totalAmount = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+    
+            const payload = {
+                customerName,
+                cart: cartData,
+                total: totalAmount.toFixed(2) // Total amount for the entire cart
+            };
+    
+            fetch('/portal/bar-buy', {  // Ensure the correct endpoint is used
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                Toastify({
+					text: data.message,
+					duration: 2000,
+					//destination: "https://github.com/apvarun/toastify-js",
+					newWindow: true,
+					close: true,
+					gravity: "top", // `top` or `bottom`
+					position: "center", // `left`, `center` or `right`
+					stopOnFocus: true, // Prevents dismissing of toast on hover
+					style: {
+						background: "green",
+					},
+					onClick: function(){} // Callback after click
+					}).showToast();
+                clearCart(); // Clear the cart after saving
+                window.location.reload();
+                addRecentSummary({ id: data.id, customerName, total: data.total });
+            })
+            .catch(error => console.error('Error saving cart:', error));
+        }
+    
+        function searchProducts() {
+            const searchTerm = document.getElementById('product-search').value.toLowerCase();
+            const filteredProducts = products.filter(product =>
+                product.name.toLowerCase().includes(searchTerm)
+            );
+            renderProductGrid(filteredProducts);
+        }
+    
+        function addRecentSummary(summary) {
+            recentSummaries.push(summary);
+            renderRecentSummaries();
+        }
+    
+        function renderRecentSummaries() {
+            const recentSummaryList = document.getElementById('recent-summary-list');
+            recentSummaryList.innerHTML = recentSummaries.map(summary => `
+                <div class="summary-item">
+                    <div>
+                        <strong>${summary.customerName}</strong><br>
+                        Total: $${summary.total.toFixed(2)}<br>
+                        Date: ${summary.date}
+                    </div>
+                    <button onclick="viewSummary(${summary.id})">View</button>
+                </div>
+            `).join('');
+        }
+    
+        function viewSummary(id) {
+            // Implement view summary functionality
+            alert(`Viewing summary for ID: ${id}`);
+        }
+    
+        // Handle tab switching
+        document.querySelectorAll('.tab-link').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+                document.getElementById(this.dataset.tab).style.display = 'block';
+                if (this.dataset.tab === 'recent-summary') {
+                    renderRecentSummaries();
+                }
+            });
+        });
+    
+        // Initialize the product grid
+        renderProductGrid(products);
+        renderRecentSummaries();
+    </script> -->
+    
+</body>
+
+</html>

@@ -5,7 +5,8 @@ const sequelize = connectDb;
 const Drink = sequelize.define('Drink', {
   name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique:true
   },
   totalStock: {
     type: DataTypes.INTEGER,

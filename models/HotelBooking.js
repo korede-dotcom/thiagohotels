@@ -97,6 +97,10 @@ const HotelBooking = sequelize.define('hotelbooking', {
     reference_id: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    created_at:{
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.NOW,
     }
 }, {
     hooks: {

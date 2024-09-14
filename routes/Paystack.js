@@ -7,6 +7,7 @@ const moment = require('moment');
 const RoomNumber = require("../models/RoomNumbers");
 const {Sequelize,Op} = require('sequelize');
 const SendEmail = require("../utils/sendEmail");
+const checkAuthCookie = require("../middleware/checkAuthCookie");
 // const todoControl = require("../controllers/Todo")
 // const allowedUser = require("../middleware/Authorization")
 // const {todoListValidationRules} = require("../middleware/validator")
@@ -20,9 +21,19 @@ const PAYSTACK_BASE_URL = process.env.PAYSTACK_BASE_URL;
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY; // Get your API key from environment variables
 
 // Route to initiate a payment
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
 
 
-routes.post('/paystack/initialize/reception', expressAsyncHandler( async (req, res) => {
+// console.log(randomString); // Example output: 'aB3dEfGh'
+
+routes.post('/paystack/initialize/reception', checkAuthCookie,expressAsyncHandler( async (req, res) => {
   const { category_id, start, end, mode,room_number } = req.body;
   console.log("🚀 ~ routes.post ~ req.body:", req.body)
 
@@ -91,7 +102,7 @@ routes.post('/paystack/initialize/reception', expressAsyncHandler( async (req, r
 // }
 if (bookedRooms) {
   return res.json({
-    message: `this room ${bookedRooms.dataValues.room_number} has been booked online since ${new Date(bookedRooms.dataValues.createdAt).toDateString()} for today ${new Date(bookedRooms.dataValues.start).toDateString()} till ${new Date(bookedRooms.dataValues.end).toDateString()} here is the refrence ${bookedRooms.dataValues.reference_id}`,
+    message: `this room ${bookedRooms.dataValues.room_number} has been booked ${bookedRooms.dataValues.booked_from} since ${new Date(bookedRooms.dataValues.createdAt).toDateString()} for ${new Date(bookedRooms.dataValues.start).toDateString()} till ${new Date(bookedRooms.dataValues.end).toDateString()} here is the refrence ${bookedRooms.dataValues.reference_id} how ever you can make future bookings`,
     reference_id: bookedRooms.dataValues.reference_id,
     status: false
   });
@@ -106,6 +117,8 @@ console.log(bookedRooms);
     const [year, month, day] = dateStr.split('-').map(Number);
     return new Date(year, month - 1, day); // month is 0-indexed in Date
   }
+
+  
   
   // Example usage:
   const parsedStartDate = parseDate(start);
@@ -136,6 +149,55 @@ console.log(bookedRooms);
     console.log("🚀 ~ routes.post ~ totalCost:", totalCost)
 
     // Create a reference for the transaction
+
+    if (req.body.mode === "Cash") {
+      console.log("🚀 ~ routes.post ~ req.user:", req.user)
+
+      const saveData =  await HotelBooking.create({
+        ...req.body,start:start,end:end,guest_count:findCategory.number_of_guests,
+              night:daysDifference,
+              amount:totalCost * 100,
+              reference_id: generateRandomString(8),
+              booked_from:'reception',
+              booked_by:req.user.name,    
+              status:"success",
+              payment_mode:'cash',
+              checked_in_by:req.user.name,
+              checked_in:true,
+
+      });
+
+      const startDate = new Date(start);
+      const currentDate = new Date();
+      
+      // Reset time components of the dates for accurate comparison.
+      startDate.setHours(0, 0, 0, 0);
+      currentDate.setHours(0, 0, 0, 0);
+      
+      // Check if start date is the current date
+      console.log("🚀 ~ routes.post ~ startDate.getTime() === currentDate.getTime():", startDate.getTime() === currentDate.getTime())
+      if (startDate.getTime() === currentDate.getTime()) {
+          // Update room status only if start date is the current date
+          const isUpdated = await RoomNumber.update(
+              { status: true },
+              { where: { room_number: req.body.room_number } }
+          );
+          console.log("🚀 ~ routes.post ~ isUpdated:", isUpdated)
+      }
+     
+      res.status(200).json({
+        status: true,
+        message: 'Room has been booked with cash ',
+        // data: response.data.data,
+      });
+
+      // Save the transaction reference to your database
+   
+
+
+    console.log("🚀 ~ routes.post ~ saveData:", saveData)
+   return;
+    }
 
       const response = await axios.post(
         `${process.env.paystackUrl}/transaction/initialize`,
@@ -170,10 +232,34 @@ console.log(bookedRooms);
       const sortNumber = req.body.guest_phone.toString().substring(1);
     const formattedNumber = '234' + sortNumber;
     console.log(formattedNumber);
-    // const msg = `Your booking has been initiated please make payments here link:${response.data.data.authorization_url}`;
-    //   const sendSms = await axios.get(`${process.env.smsUrl}?user=${process.env.smsusername}&pass=${process.env.smspassword}&to=${formattedNumber}&from=${process.env.smsFrom}&msg=${msg}`)
 
-    //   SendEmail("heelo",'hiii',msg,'korede@tm30.net');
+    if (req.body.mode === "Generate-Bank-Transfer") {
+      res.status(200).json({
+        status: true,
+        message: 'Payment initialized successfully',
+        data: response.data.data,
+      });
+
+      // Save the transaction reference to your database
+    const saveData =  await HotelBooking.create({
+        ...req.body,start:start,end:end,guest_count:findCategory.number_of_guests,
+              night:daysDifference,
+              amount:totalCost * 100,
+              reference_id:response.data.data.reference,
+              booked_from:'reception',
+              booked_by:req.body.guest_name,    
+      });
+
+
+    console.log("🚀 ~ routes.post ~ saveData:", saveData)
+   return;
+    }
+ 
+
+    const msg = `Your booking has been initiated please make payments here link:${response.data.data.authorization_url}`;
+      const sendSms = await axios.get(`${process.env.smsUrl}?user=${process.env.smsusername}&pass=${process.env.smspassword}&to=${formattedNumber}&from=${process.env.smsFrom}&msg=${msg}`)
+
+      SendEmail("heelo",'hiii',msg,req.body.guest_email);
   
       // console.log("🚀 ~ routes.post ~ sendSms:", sendSms)
       res.status(200).json({
@@ -197,6 +283,7 @@ console.log(bookedRooms);
    return;
     
   }));
+  
 routes.post('/paystack/initialize', expressAsyncHandler( async (req, res) => {
     const { category_id,start,end } = req.body;
     console.log(req.body)

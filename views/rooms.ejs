@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from kodesolution.com/html/2023/hoexr-html/page-rooms.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 25 Aug 2023 12:36:10 GMT -->
+<head>
+	<meta charset="utf-8">
+	<title>Hoexr | Hotel HTML Template Template</title>
+	<!-- Stylesheets -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+	<link rel="icon" href="images/favicon.png" type="image/x-icon">
+	<!-- Responsive -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+  <style>
+    .image-2 img {
+width: 100%;
+height: 500px;
+object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+/* Optional: Add some margin for small screens to better center */
+@media (max-width: 576px) {
+.room-block {
+margin-bottom: 20px;
+
+}
+.image-2 img{
+margin-inline: 10px;
+}
+}
+ </style>
+</head>
+
+<body>
+<div class="page-wrapper">
+	<!-- Preloader -->
+	<div class="preloader"></div>
+
+  <!-- Main Header-->
+  <%- include('partials/header') %>
+	<!--End Main Header -->
+
+	<!-- Start main-content -->
+	<section class="page-title" style="background-image: url(images/background/page-title-bg.png);">
+		<div class="auto-container">
+			<div class="title-outer text-center">
+				<h1 class="title">Rooms</h1>
+				<ul class="page-breadcrumb">
+					<li><a href="index-3.html">Home</a></li>
+					<li>Rooms</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<!-- end main-content -->
+
+  <!-- rooms-section -->
+  <section class="rooms-section pb-100">
+    <div class="auto-container">
+      <div class="row">
+        <!-- room-block -->
+        <div class="row">
+          <% categories.forEach(pkg => { %>
+            <!-- Each package as a column -->
+            <div class="room-block col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center">
+              <div class="inner-box wow fadeIn text-center">
+                <div class="image-box">
+                  <figure class="image-2 overlay-anim">
+                    <img src="<%= pkg.picture[0] %>" alt="" class="img-fluid">
+                  </figure>
+                </div>
+                <div class="content-box">
+                  <%= pkg.category_name.toUpperCase() %>
+                  <h6 class="title"><a href="/rooms?id=<%= pkg._id %>"><%= pkg.category_name %></a></h6>
+                  <span class="price">#<%= pkg.price %> / NIGHT</span>
+                </div>
+                <div class="box-caption">
+                  <a href="/rooms?id=<%= pkg._id %>" title="" class="book-btn">View</a>
+                  <ul class="bx-links">
+                    <li><a href="room-details.html" title=""><i class="fa fa-wifi"></i></a></li>
+                    <li><a href="room-details.html" title=""><i class="fa fa-bed"></i></a></li>
+                    <li><a href="room-details.html" title=""><i class="fa fa-bath"></i></a></li>
+                    <li><a href="room-details.html" title=""><i class="fa fa-shower"></i></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End rooms-section -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer footer-style-one">
+    <!-- Widgets Section -->
+    <div class="widgets-section">
+      <div class="auto-container">
+        <div class="row">
+          <!-- Footer Column -->
+          <div class="footer-column col-lg-4 col-sm-6">
+            <div class="footer-widget about-widget wow fadeInLeft">
+              <div class="widget-content">
+                <div class="logo"><a href="#"> <img src="images/logo-2.png" alt="" title=""></a></div>
+                <div class="text">Welcome to the best five-star deluxe hotel in New <br>York. Hotel elementum sesue the aucan vestibulum <br>aliquam justo in sapien rutrum volutpat.</div>
+                <ul class="social-icon-two">
+                  <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                  <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                  <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                  <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Footer Column -->
+          <div class="footer-column col-lg-2 col-sm-6 mb-0">
+            <div class="footer-widget links-widget wow fadeInLeft" data-wow-delay="200ms">
+              <h4 class="widget-title">Services Links</h4>
+              <div class="widget-content">
+                <ul class="user-links">
+                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Home</a></li>
+                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Rooms & Suites</a></li>
+                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Restaurant</a></li>
+                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Spa & Wellness</a></li>
+                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>About Hotel</a></li>
+                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Contact</a></li>
+                </ul>
+              </div>
+            </div>                       
+          </div>
+          <!-- Footer Column -->
+          <div class="footer-column col-lg-3 col-sm-6">
+            <div class="footer-widget info-widget wow fadeInLeft" data-wow-delay="300ms">
+              <h4 class="widget-title">Information</h4>
+              <div class="widget-content">
+                <!-- Recent Post -->
+                <article class="recent-post">
+                  <div class="inner">
+                    <div class="post-info"><i class="fas fa-phone"></i> 1800-121-3637</div>
+                    <div class="post-info">+91-7052-101-786</div>
+                    <div class="post-info"><i class="fa fa-envelope"></i> info@example.com</div>
+                    <div class="post-info"><i class="fas fa-location"></i> 6 Adeniyi Street Itire Lagos, <br>Lagos State, Nigeria</div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <!-- footer column -->
+          <div class="footer-column col-lg-3 col-sm-6">
+            <div class="footer-widget news-widget wow fadeInLeft" data-wow-delay="400ms">
+              <h4 class="widget-title">Newsletter</h4>
+              <div class="text">Lorem ipsum dolor sit amet consectetur Augue id fermentum</div>
+              <div class="subscribe-form-three">
+                <form method="post" action="#">
+                  <div class="form-group">
+                    <input type="email" name="email" class="email" value="" placeholder="Email Address" required="">
+                    <button type="button" class="theme-btn btn-style-one"><span class="btn-title"><i class="fa fa-paper-plane"></i></span></button>
+                  </div>
+                </form>
+              </div>
+              <div class="text"><i class="fa-regular fa-circle-check"></i>I agree to all terms and policies</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  Footer Bottom -->
+    <div class="footer-bottom wow slideInUp">
+      <div class="auto-container">
+        <div class="inner-container">
+          <div class="copyright-text">© Copyrights 2023 Hoexr All rights reserved.</div>
+          <div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-up"></span></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--End Main Footer -->
+
+	</div><!-- End Page Wrapper -->
+	<!-- Scroll To Top -->
+	<div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-angle-up"></span></div>
+	<script src="js/jquery.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.fancybox.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/wow.js"></script>
+	<script src="js/appear.js"></script>
+	<script src="js/owl.js"></script>
+	<script src="js/script.js"></script>
+</body>
+
+
+<!-- Mirrored from kodesolution.com/html/2023/hoexr-html/page-rooms.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 25 Aug 2023 12:36:12 GMT -->
+</html>

@@ -6,7 +6,12 @@
 					<div class="row align-items-center">
 						<div class="col">
 							<div class="mt-5">
+								<% if (roleName !== 'hotel receptionist') { %>
 								<h4 class="card-title float-left mt-2">All Rooms</h4> <a href="/portal/add-room" class="btn btn-primary float-right veiwbutton">Add Room</a> </div>
+								<% } else { %>
+									<h4 class="card-title float-left mt-2">All Rooms</h4>
+                                <!-- <h4 class="card-title float-left mt-2">My Rooms</h4> <a href="/portal/my-rooms" class="btn btn-primary float-right veiwbutton">View All</a> </div> -->
+                                <% } %>
 						</div>
 					</div>
 				</div>
@@ -39,8 +44,8 @@
 												<td><%=result.id%></td>
 												<td>
 													<h2 class="table-avatar">
-                                                    <a href="profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src=<%= result.picture[0]%> alt="Room  Image"></a>
-                                                    <a href="profile.html"><%=result.room_name%> <span><%=result.room_number%></span></a>
+                                                    <a   class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src=<%= result.picture[0]%> alt="Room  Image"></a>
+                                                    <a  ><%=result.room_name%> <span><%=result.room_number%></span></a>
                                                     </h2>
                                                 </td>
 												<td><%= result.category_name %></td>
@@ -52,7 +57,13 @@
 												<td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c0b4afadadb9a2a5b2aea1ac80a5b8a1adb0aca5eea3afad">[email&#160;protected]</a></td>
 												<td>631-254-6480</td> -->
 												<td>
-													<div class="actions"> <a href="#" class="btn btn-sm bg-success-light mr-2">Active</a> </div>
+													<div class="actions">
+														<a href="#" class="btn btn-sm bg-success-light mr-2">
+															<%= result.status.toString() === 'true' || result.status.toString() === 'true' ? "inactive" : "active" %>
+														</a>
+													</div>
+													
+													
 												</td>
 												<td class="text-right">
 													<div class="dropdown dropdown-action"> <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v ellipse_color"></i></a>

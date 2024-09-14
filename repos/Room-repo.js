@@ -193,6 +193,15 @@ class RoomRepository {
     return categories;
     
   }
+  async editcategory(id,data) {
+    console.log("🚀 ~ RoomRepository ~ deletecategory ~ categories:", id)
+    const categories = await Room.update({...data},{where: {_id: id}})
+    // const deleteRoom = await RoomNumber.destroy({where: {category_id: id}});
+    // console.log("🚀 ~ RoomRepository ~ deletecategory ~ deleteRoom:", deleteRoom)
+    
+    return categories;
+    
+  }
 
   async Bookings () {
     HotelBooking.belongsTo(Room,{foreignKey:"room_id"})

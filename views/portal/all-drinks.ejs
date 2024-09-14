@@ -171,6 +171,85 @@
 		color: #94081a;
 		cursor: pointer;
 	}
+	.product-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 2px solid transparent;
+  flex: 1 1 calc(25% - 20px); /* 4 cards per row on large screens */
+  margin: 10px;
+}
+
+.product-card.selected {
+  border: 2px solid #94081a;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-box {
+  background-color: #94081a;
+  color: white;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.product-name {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+.product-info {
+  color: black;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 1200px) {
+  .product-card {
+    flex: 1 1 calc(33.33% - 20px); /* 3 cards per row on medium screens */
+  }
+}
+
+@media (max-width: 992px) {
+  .product-card {
+    flex: 1 1 calc(50% - 20px); /* 2 cards per row on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    flex: 1 1 calc(100% - 20px); /* 1 card per row on mobile phones */
+  }
+
+  .product-box {
+    padding: 15px; /* Reduce padding on smaller screens */
+  }
+
+  .product-name {
+    font-size: 1em; /* Adjust font size */
+  }
+
+  .product-info {
+    font-size: 1.1em; /* Adjust font size */
+  }
+}
+
+/* Ensure the product grid is flexible */
+#product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+
 </style>
 		<div class="page-wrapper">
 			<div class="content container-fluid">
@@ -179,7 +258,7 @@
 						<div class="col">
 							<div class="mt-5">
 								<h4 class="card-title float-left mt-2">List of Drinks</h4>
-                                <a href="/portal/add-booking" class="btn btn-primary float-right veiwbutton ">Add new</a>
+                                <a href="/portal/bar-create-drinks" class="btn btn-primary float-right veiwbutton ">Add new</a>
                             </div>
 						</div>
 					</div>
@@ -188,7 +267,22 @@
 				
 				<div class="row">
 					<div class="col-sm-12">
+						
 						<div class="card card-table">
+								<div class="top-nav-search" style="float: right;width: 30%;">
+									<input type="text" id="productSearch" class="form-control" placeholder="Search for products..." onkeyup="searchProducts()" style="margin-top: 20px;">
+
+											<!-- <form method="get" action="/portal/all-booking">
+											
+												<div class="input-group">
+												  <input type="text" class="form-control" name="room_number" placeholder="Search by room" required>
+												  <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+												</div>
+												<a id="goBackButton" style="display: none;float: right; color: #94081a;" onclick="window.location.href='/portal/all-booking';">Go Back to all bookimgs</a>
+
+											  </form> -->
+
+										</div>
 							<div class="card-body booking_card">
 								<div class="table-responsive">
 									<div class="main-content">
@@ -198,159 +292,293 @@
 									</div>
 								
 									<script>
-										const products = [
-											{ id: 1, name: "Product 1", price: 10, image: "https://via.placeholder.com/150" },
-											{ id: 2, name: "Product 2", price: 20, image: "https://via.placeholder.com/150" },
-											{ id: 3, name: "Product 3", price: 30, image: "https://via.placeholder.com/150" },
-											{ id: 4, name: "Product 4", price: 390, image: "https://via.placeholder.com/150" },
-											{ id: 5, name: "Product 5", price: 350, image: "https://via.placeholder.com/150" },
-											{ id: 6, name: "Product 6", price: 30, image: "https://via.placeholder.com/150" },
-											{ id: 7, name: "Product 7", price: 330, image: "https://via.placeholder.com/150" },
-											{ id: 1, name: "Product 1", price: 10, image: "https://via.placeholder.com/150" },
-											{ id: 2, name: "Product 2", price: 20, image: "https://via.placeholder.com/150" },
-											{ id: 3, name: "Product 3", price: 30, image: "https://via.placeholder.com/150" },
-											{ id: 4, name: "Product 4", price: 390, image: "https://via.placeholder.com/150" },
-											{ id: 5, name: "Product 5", price: 350, image: "https://via.placeholder.com/150" },
-											{ id: 6, name: "Product 6", price: 30, image: "https://via.placeholder.com/150" },
-											{ id: 7, name: "Product 7", price: 330, image: "https://via.placeholder.com/150" },
-											{ id: 8, name: "Product 8", price: 310, image: "https://via.placeholder.com/150" },
-											// Add more products as needed
-										];
-								
+										const parsedProducts = '<%= drinks %>'; 
+
+										const decodedProducts = parsedProducts.replace(/&#34;/g, '"');
+
+										// Parse the decoded string into a JavaScript object
+										const products = JSON.parse(decodedProducts);
+
+										console.log("🚀 ~ parsedProducts:", parsedProducts);
+										console.log("🚀 ~ products:", products);
+
 										const cart = [];
 										const recentSummaries = [
-											{ id: 1, customerName: "John Doe", total: 100.00, date: "2024-09-01" },
-											{ id: 2, customerName: "Jane Smith", total: 150.00, date: "2024-09-02" },
-											// Add more recent summaries as needed
+										{ id: 1, customerName: "John Doe", total: 100.00, date: "2024-09-01" },
+										{ id: 2, customerName: "Jane Smith", total: 150.00, date: "2024-09-02" },
+										// Add more recent summaries as needed
 										];
-								
+
+										// Function to render products in the grid
 										function renderProductGrid(products) {
-											const grid = document.getElementById('product-grid');
-											grid.innerHTML = products.map(product => `
-												<div class="product-card" id="product-${product.id}" onclick="addToCart(${product.id})">
-													<img src="${product.image}" alt="${product.name}">
-													<div class="product-info">
-														<h3>${product.name}</h3>
-														<p>$${product.price.toFixed(2)}</p>
-													</div>
-												</div>
-											`).join('');
-										}
+  const grid = document.getElementById('product-grid');
+  grid.innerHTML = products.map(product => `
+    <div class="product-card" id="product-${product.id}">
+      <div class="product-box">
+        <h3 class="product-name" contenteditable="true" id="name-${product.id}" oninput="showSaveButton(${product.id})">
+          ${product.name.toUpperCase()}
+        </h3>
+      </div>
+      <div class="product-info">
+        <h3 contenteditable="true" id="price-${product.id}" oninput="showSaveButton(${product.id})">
+          #${product.price.toFixed(2)}
+        </h3>
+      </div>
+      <div style="float:right;" contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
+        <span>Stock: ${product.totalStock}</span>
+      </div>
+      <button id="save-btn-${product.id}" onclick="saveEdits(${product.id})" class="btn btn-primary" style="display: none;">
+        Save
+      </button>
+    </div>
+  `).join('');
+}
+
+// Show the save button when an element is edited
+function showSaveButton(productId) {
+  document.getElementById(`save-btn-${productId}`).style.display = 'inline-block';
+}
+
+// Function to save the edits and post to /bar-edit-drinks
+function saveEdits(productId) {
+  const nameElement = document.getElementById(`name-${productId}`);
+  const priceElement = document.getElementById(`price-${productId}`);
+  const stockElement = document.getElementById(`stock-${productId}`);
+
+  const name = nameElement.innerText.trim();
+  const price = parseFloat(priceElement.innerText.replace('#', '').trim());
+  const totalStock = parseInt(stockElement.innerText.replace('Stock:', '').trim());
+
+  // Prepare payload
+  const payload = {};
+  if (name !== nameElement.dataset.originalName) {
+    payload.name = name;
+  }
+  if (price !== parseFloat(priceElement.dataset.originalPrice)) {
+    payload.price = price;
+  }
+  if (totalStock !== parseInt(stockElement.dataset.originalStock)) {
+    payload.totalStock = totalStock;
+  }
+
+  // If no changes, do nothing
+  if (Object.keys(payload).length === 0) {
+    alert('No changes detected.');
+    return;
+  }
+
+  // Post the edited values to the server
+  fetch('/portal/bar-edit-drinks', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: productId,
+      ...payload
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status) {
+		nameElement.dataset.originalName = name;
+      priceElement.dataset.originalPrice = price;
+      stockElement.dataset.originalStock = totalStock;
+      document.getElementById(`save-btn-${productId}`).style.display = 'none';
+		Toastify({
+					text: data.message,
+					duration: 3000,
+					//destination: "https://github.com/apvarun/toastify-js",
+					newWindow: true,
+					close: true,
+					gravity: "top", // `top` or `bottom`
+					position: "center", // `left`, `center` or `right`
+					stopOnFocus: true, // Prevents dismissing of toast on hover
+					style: {
+						background: "green",
+					},
+					onClick: function(){} // Callback after click
+					}).showToast();
+      // Update original values
+   
+	  return
+
+    } else {
+		Toastify({
+					text: data.message,
+					duration: 3000,
+					//destination: "https://github.com/apvarun/toastify-js",
+					newWindow: true,
+					close: true,
+					gravity: "top", // `top` or `bottom`
+					position: "center", // `left`, `center` or `right`
+					stopOnFocus: true, // Prevents dismissing of toast on hover
+					style: {
+						background: "red",
+					},
+					onClick: function(){} // Callback after click
+					}).showToast();
+    }
+  })
+  .catch(error => {
+   Toastify({
+					text: "an error occured",
+					duration: 3000,
+					//destination: "https://github.com/apvarun/toastify-js",
+					newWindow: true,
+					close: true,
+					gravity: "top", // `top` or `bottom`
+					position: "center", // `left`, `center` or `right`
+					stopOnFocus: true, // Prevents dismissing of toast on hover
+					style: {
+						background: "green",
+					},
+					onClick: function(){} // Callback after click
+					}).showToast();
+  });
+}
+
+// Function to initialize original values for comparison
+function initializeOriginalValues(products) {
+  products.forEach(product => {
+    document.getElementById(`name-${product.id}`).dataset.originalName = product.name;
+    document.getElementById(`price-${product.id}`).dataset.originalPrice = product.price.toFixed(2);
+    document.getElementById(`stock-${product.id}`).dataset.originalStock = product.totalStock;
+  });
+}
+
+// Example of initializing the grid and original values
+renderProductGrid(products);
+initializeOriginalValues(products);
+
+
+
+										renderProductGrid(products);
+
+									function searchProducts() {
+									const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+									const filteredProducts = products.filter(product =>
+										product.name.toLowerCase().includes(searchTerm)
+									);
+									console.log("🚀 ~ searchProducts ~ filteredProducts:", filteredProducts)
+									renderProductGrid(filteredProducts); // Re-render the grid with filtered products
+									}
+
 								
-										function addToCart(productId) {
-											const product = products.find(p => p.id === productId);
-											const existingItem = cart.find(item => item.product.id === productId);
+										// function addToCart(productId) {
+										// 	const product = products.find(p => p.id === productId);
+										// 	const existingItem = cart.find(item => item.product.id === productId);
 									
-											// Toggle product card selection style
-											const productCard = document.getElementById(`product-${productId}`);
-											productCard.classList.toggle('selected');
+										// 	// Toggle product card selection style
+										// 	const productCard = document.getElementById(`product-${productId}`);
+										// 	productCard.classList.toggle('selected');
 								
-											if (existingItem) {
-												existingItem.quantity++;
-											} else {
-												cart.push({ product, quantity: 1 });
-											}
+										// 	if (existingItem) {
+										// 		existingItem.quantity++;
+										// 	} else {
+										// 		cart.push({ product, quantity: 1 });
+										// 	}
 									
-											updateCart();
-										}
+										// 	updateCart();
+										// }
 								
-										function updateCart() {
-											const cartList = document.getElementById('cart-list');
-											const totalCostElem = document.getElementById('total-cost');
-											let total = 0;
+										// function updateCart() {
+										// 	const cartList = document.getElementById('cart-list');
+										// 	const totalCostElem = document.getElementById('total-cost');
+										// 	let total = 0;
 									
-											cartList.innerHTML = cart.map(item => `
-												<div class="item">
-													<span>${item.product.name} (x${item.quantity})</span>
-													<button onclick="removeFromCart(${item.product.id})">Remove</button>
-												</div>
-											`).join('');
+										// 	cartList.innerHTML = cart.map(item => `
+										// 		<div class="item">
+										// 			<span>${item.product.name} (x${item.quantity})</span>
+										// 			<button onclick="removeFromCart(${item.product.id})">Remove</button>
+										// 		</div>
+										// 	`).join('');
 									
-											total = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
-											totalCostElem.innerText = total.toFixed(2);
-										}
+										// 	total = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+										// 	totalCostElem.innerText = total.toFixed(2);
+										// }
 								
-										function removeFromCart(productId) {
-											const productIndex = cart.findIndex(item => item.product.id === productId);
-											const productCard = document.getElementById(`product-${productId}`);
-											if (productIndex > -1) {
-												cart.splice(productIndex, 1);
-												productCard.classList.remove('selected');
-											}
-											updateCart();
-										}
+										// function removeFromCart(productId) {
+										// 	const productIndex = cart.findIndex(item => item.product.id === productId);
+										// 	const productCard = document.getElementById(`product-${productId}`);
+										// 	if (productIndex > -1) {
+										// 		cart.splice(productIndex, 1);
+										// 		productCard.classList.remove('selected');
+										// 	}
+										// 	updateCart();
+										// }
 								
-										function clearCart() {
-											cart.length = 0; // Empty the cart array
-											document.querySelectorAll('.product-card.selected').forEach(card => card.classList.remove('selected'));
-											updateCart();
-										}
+										// function clearCart() {
+										// 	cart.length = 0; // Empty the cart array
+										// 	document.querySelectorAll('.product-card.selected').forEach(card => card.classList.remove('selected'));
+										// 	updateCart();
+										// }
 								
-										function saveCart() {
-											const customerName = document.getElementById('customer-name').value;
-											if (cart.length === 0 || !customerName) {
-												alert('Please add items to the cart and enter the customer name.');
-												return;
-											}
+										// function saveCart() {
+										// 	const customerName = document.getElementById('customer-name').value;
+										// 	if (cart.length === 0 || !customerName) {
+										// 		alert('Please add items to the cart and enter the customer name.');
+										// 		return;
+										// 	}
 								
-											const cartData = cart.map(item => ({
-												id: item.product.id,
-												name: item.product.name,
-												quantity: item.quantity
-											}));
+										// 	const cartData = cart.map(item => ({
+										// 		id: item.product.id,
+										// 		name: item.product.name,
+										// 		quantity: item.quantity
+										// 	}));
 								
-											const payload = {
-												customerName,
-												cart: cartData
-											};
+										// 	const payload = {
+										// 		customerName,
+										// 		cart: cartData
+										// 	};
 								
-											fetch('/bar/buys', {
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json'
-												},
-												body: JSON.stringify(payload)
-											})
-											.then(response => response.json())
-											.then(data => {
-												alert('Cart saved successfully!');
-												clearCart(); // Clear the cart after saving
-												addRecentSummary({ id: data.id, customerName, total: data.total });
-											})
-											.catch(error => console.error('Error saving cart:', error));
-										}
+										// 	fetch('/bar/buys', {
+										// 		method: 'POST',
+										// 		headers: {
+										// 			'Content-Type': 'application/json'
+										// 		},
+										// 		body: JSON.stringify(payload)
+										// 	})
+										// 	.then(response => response.json())
+										// 	.then(data => {
+										// 		alert('Cart saved successfully!');
+										// 		clearCart(); // Clear the cart after saving
+										// 		addRecentSummary({ id: data.id, customerName, total: data.total });
+										// 	})
+										// 	.catch(error => console.error('Error saving cart:', error));
+										// }
 								
-										function searchProducts() {
-											const searchTerm = document.getElementById('product-search').value.toLowerCase();
-											const filteredProducts = products.filter(product =>
-												product.name.toLowerCase().includes(searchTerm)
-											);
-											renderProductGrid(filteredProducts);
-										}
+										// function searchProducts() {
+										// 	const searchTerm = document.getElementById('product-search').value.toLowerCase();
+										// 	const filteredProducts = products.filter(product =>
+										// 		product.name.toLowerCase().includes(searchTerm)
+										// 	);
+										// 	renderProductGrid(filteredProducts);
+										// }
 								
-										function addRecentSummary(summary) {
-											recentSummaries.push(summary);
-											renderRecentSummaries();
-										}
+										// function addRecentSummary(summary) {
+										// 	recentSummaries.push(summary);
+										// 	renderRecentSummaries();
+										// }
 								
-										function renderRecentSummaries() {
-											const recentSummaryList = document.getElementById('recent-summary-list');
-											recentSummaryList.innerHTML = recentSummaries.map(summary => `
-												<div class="summary-item">
-													<div>
-														<strong>${summary.customerName}</strong><br>
-														Total: $${summary.total.toFixed(2)}<br>
-														Date: ${summary.date}
-													</div>
-													<button onclick="viewSummary(${summary.id})">View</button>
-												</div>
-											`).join('');
-										}
+										// function renderRecentSummaries() {
+										// 	const recentSummaryList = document.getElementById('recent-summary-list');
+										// 	recentSummaryList.innerHTML = recentSummaries.map(summary => `
+										// 		<div class="summary-item">
+										// 			<div>
+										// 				<strong>${summary.customerName}</strong><br>
+										// 				Total: #${summary.total.toFixed(2)}<br>
+										// 				Date: ${summary.date}
+										// 			</div>
+										// 			<button onclick="viewSummary(${summary.id})">View</button>
+										// 		</div>
+										// 	`).join('');
+										// }
 								
-										function viewSummary(id) {
-											// Implement view summary functionality
-											alert(`Viewing summary for ID: ${id}`);
-										}
+										// function viewSummary(id) {
+										// 	// Implement view summary functionality
+										// 	alert(`Viewing summary for ID: ${id}`);
+										// }
 								
 										// Handle tab switching
 										document.querySelectorAll('.tab-link').forEach(button => {
@@ -366,8 +594,8 @@
 										});
 								
 										// Initialize the product grid
-										renderProductGrid(products);
-										renderRecentSummaries();
+										// renderProductGrid(products);
+										// renderRecentSummaries();
 									</script>
 								</div>
 							</div>

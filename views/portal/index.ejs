@@ -1,6 +1,7 @@
 ﻿
 		<%- include('partial/header', { title: 'thiagohotelsportal',email:email,roleName:roleName }) %>
 		<%- include('partial/sidebar', { name: name}) %>
+		
 		<div class="page-wrapper">
 			<div class="content container-fluid">
 				<div class="page-header">
@@ -19,8 +20,11 @@
 							<div class="card-body">
 								<div class="dash-widget-header">
 									<div>
-										<h3 class="card_widget_header">236</h3>
-										<h6 class="text-muted">Total Booking</h6> </div>
+										<h3 class="card_widget_header">
+											<%= (data.todayBooking / 100 || 0).toLocaleString('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 0 }) %>
+
+										</h3>
+										<h6 class="text-muted">Today Total Booking Amount</h6> </div>
 									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus">
 									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
 									<circle cx="8.5" cy="7" r="4"></circle>
@@ -36,7 +40,93 @@
 							<div class="card-body">
 								<div class="dash-widget-header">
 									<div>
-										<h3 class="card_widget_header">180</h3>
+										<h3 class="card_widget_header">
+											<%= (data.totalAmountForWebOnline.totalAmount / 100 || 0).toLocaleString('en-NG',{ style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 0 }) %>
+
+											
+
+										</h3>
+										<h6 class="text-muted">Today Total Booking Online</h6> </div>
+									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus">
+									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="8.5" cy="7" r="4"></circle>
+									<line x1="20" y1="8" x2="20" y2="14"></line>
+									<line x1="23" y1="11" x2="17" y2="11"></line>
+									</svg></span> </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 col-12">
+						<div class="card board1 fill">
+							<div class="card-body">
+								<div class="dash-widget-header">
+									<div>
+										<h3 class="card_widget_header">
+											<%=data.totalAmountForWebOnline.bookingCount %>
+										</h3>
+										<h6 class="text-muted">Today Booking Online Count</h6> </div>
+									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus">
+									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="8.5" cy="7" r="4"></circle>
+									<line x1="20" y1="8" x2="20" y2="14"></line>
+									<line x1="23" y1="11" x2="17" y2="11"></line>
+									</svg></span> </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 col-12">
+						<div class="card board1 fill">
+							<div class="card-body">
+								<div class="dash-widget-header">
+									<div>
+										<h3 class="card_widget_header">
+											<%= (data.totalAmountForReception.totalAmount / 100 || 0).toLocaleString('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 0 }) %>
+
+								
+
+
+										</h3>
+										<h6 class="text-muted">Today receptionist Booking Amount</h6> </div>
+									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus">
+									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="8.5" cy="7" r="4"></circle>
+									<line x1="20" y1="8" x2="20" y2="14"></line>
+									<line x1="23" y1="11" x2="17" y2="11"></line>
+									</svg></span> </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 col-12">
+						<div class="card board1 fill">
+							<div class="card-body">
+								<div class="dash-widget-header">
+									<div>
+										<h3 class="card_widget_header">
+											<%=data.totalAmountForReception.bookingCount %>
+											
+										</h3>
+										<h6 class="text-muted">Today receptionist Booking Count</h6> </div>
+									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus">
+									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="8.5" cy="7" r="4"></circle>
+									<line x1="20" y1="8" x2="20" y2="14"></line>
+									<line x1="23" y1="11" x2="17" y2="11"></line>
+									</svg></span> </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 col-12">
+						<div class="card board1 fill">
+							<div class="card-body">
+								<div class="dash-widget-header">
+									<div>
+										<h3 class="card_widget_header">
+											<%= data.availableroomCount %>
+										</h3>
 										<h6 class="text-muted">Available Rooms</h6> </div>
 									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign">
 									<line x1="12" y1="1" x2="12" y2="23"></line>
@@ -51,8 +141,27 @@
 							<div class="card-body">
 								<div class="dash-widget-header">
 									<div>
-										<h3 class="card_widget_header">1538</h3>
-										<h6 class="text-muted">Enquiry</h6> </div>
+										<h3 class="card_widget_header">
+											<%= data.roomCount %>
+										</h3>
+										<h6 class="text-muted">Available Rooms</h6> </div>
+									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign">
+									<line x1="12" y1="1" x2="12" y2="23"></line>
+									<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+									</svg></span> </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 col-12">
+						<div class="card board1 fill">
+							<div class="card-body">
+								<div class="dash-widget-header">
+									<div>
+										<h3 class="card_widget_header">
+											<%= data.totalStaff %>
+										</h3>
+										<h6 class="text-muted">Total Staff</h6> </div>
 									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-plus">
 									<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z">
 									</path>
@@ -69,8 +178,51 @@
 							<div class="card-body">
 								<div class="dash-widget-header">
 									<div>
-										<h3 class="card_widget_header">364</h3>
-										<h6 class="text-muted">Collections</h6> </div>
+										<h3 class="card_widget_header">
+											<%= data.customerCount %>
+										</h3>
+										<h6 class="text-muted">Total Customers</h6> </div>
+									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe">
+									<circle cx="12" cy="12" r="10"></circle>
+									<line x1="2" y1="12" x2="22" y2="12"></line>
+									<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+									</path>
+									</svg></span> </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 col-12">
+						<div class="card board1 fill">
+							<div class="card-body">
+								<div class="dash-widget-header">
+									<div>
+										<h3 class="card_widget_header">
+											₦<%= (data.todayBarSummary || 0).toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) %>
+
+
+
+										</h3>
+										<h6 class="text-muted">Total Bar Amount Today</h6> </div>
+									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe">
+									<circle cx="12" cy="12" r="10"></circle>
+									<line x1="2" y1="12" x2="22" y2="12"></line>
+									<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+									</path>
+									</svg></span> </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-sm-6 col-12">
+						<div class="card board1 fill">
+							<div class="card-body">
+								<div class="dash-widget-header">
+									<div>
+										<h3 class="card_widget_header">
+											<%= data.totalDrink %>
+										</h3>
+										<h6 class="text-muted">Total Drinks Count</h6> </div>
 									<div class="ml-auto mt-md-3 mt-lg-0"> <span class="opacity-7 text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="#e84646" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe">
 									<circle cx="12" cy="12" r="10"></circle>
 									<line x1="2" y1="12" x2="22" y2="12"></line>
@@ -84,32 +236,42 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12 col-lg-6">
-						<div class="card card-chart">
-							<div class="card-header">
-								<h4 class="card-title">VISITORS</h4> </div>
-							<div class="card-body">
-								<div id="line-chart"></div>
+							<div class="card card-chart">
+								<div class="card-header">
+									<h4 class="card-title">Booking Total Amount Per Day</h4> </div>
+								<div class="card-body">
+									<div id="chart-1"></div>
 							</div>
 						</div>
 					</div>
 					<div class="col-md-12 col-lg-6">
 						<div class="card card-chart">
 							<div class="card-header">
-								<h4 class="card-title">ROOMS BOOKED</h4> </div>
+								<h4 class="card-title">Booking Count Per Month</h4> </div>
 							<div class="card-body">
-								<div id="donut-chart"></div>
+								<div id="chart"></div>
 							</div>
 						</div>
 					</div>
+					<div class="col-md-12 col-lg-12">
+						<div class="card card-chart">
+							<div class="card-header">
+								<h4 class="card-title">Booking Total Amount Per Month</h4> </div>
+							<div class="card-body">
+								<div id="chart2"></div>
+							</div>
+						</div>
+					</div>
+					
 				</div>
 				<div class="row">
 					<div class="col-md-12 d-flex">
 						<div class="card card-table flex-fill">
 							<div class="card-header">
 								<h4 class="card-title float-left mt-2">Booking</h4>
-								<button type="button" class="btn btn-primary float-right veiwbutton">Veiw All</button>
+								<a type="button" href="/portal/all-booking" class="btn btn-primary float-right veiwbutton">Veiw All</a>
 							</div>
-							<div class="card-body">
+							<!-- <div class="card-body">
 								<div class="table-responsive">
 									<table class="table table-hover table-center">
 										<thead>
@@ -192,7 +354,7 @@
 										</tbody>
 									</table>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -208,6 +370,155 @@
 	<script src="assets/plugins/morris/morris.min.js"></script>
 	<script src="assets/js/chart.morris.js"></script>
 	<script src="assets/js/script.js"></script>
+	<script>
+
+async function fetchMonthlyData() {
+            try {
+                const response = await fetch('/portal/dashboard/monthly-bookings');
+                const data = await response.json();
+                console.log("🚀 ~ fetchMonthlyData ~ data:", data.monthlyData)
+
+				const categories = data.monthlyData.map(item => new Date(item.month).toLocaleString('default', { month: 'long', year: 'numeric' }));
+    const seriesData = data.monthlyData.map(item => parseFloat(item.count));
+
+    // Render chart with custom color and radius
+    const option = {
+        chart: {
+            type: 'bar'
+        },
+        series: [{
+            name: 'Bookings',
+            data: seriesData
+        }],
+        xaxis: {
+            categories: categories
+        },
+        title: {
+            text: 'Monthly Bookings'
+        },
+        colors: ['#94081a'],  // Set bar color to #94081a
+        plotOptions: {
+            bar: {
+                borderRadius: 10,  // Set bar border radius (adjust the value as needed)
+                distributed: true  // To ensure individual bars take the same color
+            }
+        }
+    };
+
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    // Log the data for debugging
+    console.log("🚀 ~ data.weeklyData:", data.weeklyData);
+
+    // Check if `weeklyData` exists and has valid data
+    if (data.weeklyData && data.weeklyData.length > 0) {
+        // Map the data for each week to show the week start date
+        const categories = data.weeklyData.map(item => {
+            const weekStartDate = new Date(item.week);  // Convert `week` field to Date object
+            if (isNaN(weekStartDate)) {
+                console.error("Invalid date:", item.week);
+                return 'Invalid date';  // Handle invalid dates
+            }
+            // Format the week start date as 'dd MMM yyyy' (e.g., '05 Feb 2024')
+            return weekStartDate.toLocaleDateString('default', { day: 'numeric', month: 'short', year: 'numeric' });
+        });
+        
+        const seriesData = data.weeklyData.map(item => parseFloat(item.totalAmount / 100));  // Use count of bookings per week
+
+        // Log categories and seriesData to debug
+        console.log("🚀 ~ Categories (Week Start Dates):", categories);
+        console.log("🚀 ~ Series Data (Booking Counts):", seriesData);
+
+        // Render the chart with a line chart
+        const options = {
+            chart: {
+                type: 'line',  // Change to 'line' chart
+                height: 350
+            },
+            series: [{
+                name: 'Bookings',
+                data: seriesData  // Use the series data from `weeklyData`
+            }],
+            xaxis: {
+                categories: categories  // Display the start date of the week
+            },
+            title: {
+                text: 'Bookings Per Week'
+            },
+            stroke: {
+                curve: 'smooth',  // Create smooth curves for the line
+                width: 2  // Set line width
+            },
+            colors: ['#94081a'],  // Set line color to #94081a
+            markers: {
+                size: 4,  // Set marker size on the line chart
+                colors: ['#94081a']  // Set marker color
+            },
+            tooltip: {
+                enabled: true,
+                x: {
+                    format: 'dd MMM yyyy'  // Date format for tooltip
+                }
+            }
+        };
+
+        // Initialize and render the chart
+        const chart = new ApexCharts(document.querySelector("#chart-1"), options);
+        chart.render();
+    } else {
+        console.error("No data available for weekly bookings");
+    }
+
+
+	const categoriess = data.monthlyData.map(item => new Date(item.month).toLocaleString('default', { month: 'long', year: 'numeric' }));
+    const seriesDatas = data.monthlyData.map(item => ({
+        x: new Date(item.month).toLocaleString('default', { month: 'long', year: 'numeric' }),
+        y: parseFloat(item.totalAmount / 100)
+    }));
+
+    // Define options for the chart
+    var options = {
+        series: [{
+            data: seriesDatas  // Use totalAmount data for each month
+        }],
+        legend: {
+            show: false
+        },
+        chart: {
+            height: 350,
+            type: 'treemap'
+        },
+        title: {
+            text: 'Monthly Total Amount Treemap',
+            align: 'center'
+        },
+        colors: [
+            '#3B93A5', '#F7B844', '#ADD8C7', '#EC3C65',
+            '#CDD7B6', '#C1F666', '#D43F97', '#1E5D8C',
+            '#421243', '#7F94B0', '#EF6537', '#C0ADDB'
+        ],
+        plotOptions: {
+            treemap: {
+                distributed: true,
+                enableShades: false
+            }
+        }
+    };
+
+
+    const chart = new ApexCharts(document.querySelector("#chart"), option);
+    chart.render();
+
+    const charts = new ApexCharts(document.querySelector("#chart2"), options);
+	charts.render();
+            } catch (error) {
+                console.error('Error fetching chart data:', error);
+            }
+        }
+
+        // Load the chart
+        fetchMonthlyData();
+	</script>
 </body>
 
 </html>

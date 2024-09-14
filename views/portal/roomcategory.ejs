@@ -6,7 +6,13 @@
 					<div class="row align-items-center">
 						<div class="col">
 							<div class="mt-5">
-								<h4 class="card-title float-left mt-2">All Room Categories</h4> <a href="/portal/add-room-category" class="btn btn-primary float-right veiwbutton">Add Room category</a> </div>
+								
+								<% if (roleName !== 'hotel receptionist') { %>
+									 <a href="/portal/add-room-category" class="btn btn-primary float-right veiwbutton">Add Room category</a> </div>
+								<% } else { %>
+									<h4 class="card-title float-left mt-2">All Room Categories</h4>
+                                <!-- <h4 class="card-title float-left mt-2">My Room Categories</h4> <a href="/portal/my-rooms" class="btn btn-primary float-right veiwbutton">View All</a> </div> -->
+                                <% } %>
 						</div>
 					</div>
 				</div> 

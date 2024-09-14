@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
-<!-- Mirrored from kodesolution.com/html/2023/hoexr-html/room-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 25 Aug 2023 12:36:13 GMT -->
 <head>
 	<meta charset="utf-8">
 	<title>Hoexr | Hotel HTML Template Template</title>
@@ -14,6 +12,24 @@
 	<!-- Responsive -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/flatpickr.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/slick-theme.css">
+<link rel="stylesheet" type="text/css" href="css/slick.css">
+
+<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+<link rel="icon" href="images/favicon.png" type="image/x-icon">
+
+<!-- Responsive -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+  <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
 	<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
 	<style>
@@ -40,192 +56,7 @@
 	<div class="preloader"></div>
 
   <!-- Main Header-->
-	<header class="main-header header-style-two">
-    <div class="auto-container">
-      <div class="header-top">
-        <div class="inner-box">
-          <!-- top-left -->
-          <div class="top-left">
-            <span><i class="icon fa fa-location"></i>1247/Plot No. 39, 15th Phase, USA</span>
-          </div>
-          <!-- Top-right -->
-          <div class="top-right">
-            <ul class="social-icon-one">
-              <li>Follow Us :</li>
-              <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-              <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-              <li><a href="#"><i class="fa-brands fa-linkedin"></i></a></li>
-              <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- Main box -->
-      <div class="main-box">
-        <div class="logo-box">
-          <div class="logo"><a href="index-2.html"><img src="images/logo-v5-black.png" alt="" title="Tronis"></a></div>
-        </div>
-        <!--Nav Box-->
-        <div class="nav-outer">
-          <nav class="nav main-menu">
-            <ul class="navigation">
-              <li class="dropdown"><a href="#">Home</a>
-                <ul>
-                  <li><a href="index-3.html">Home page 01</a></li>
-                  <li><a href="index-2.html">Home page 02</a></li>
-                  <li class="dropdown"><a href="#">Single Styles</a>
-                    <ul>
-                      <li><a href="index-1-single.html">Single Style One</a></li>
-                      <li><a href="index-2-single.html">Single Style Two</a></li>
-                    </ul>
-                  </li>
-                  <li class="dropdown"><a href="#">Dark Styles</a>
-                    <ul>
-                      <li><a href="index-1-dark.html">Dark Style One</a></li>
-                      <li><a href="index-2-dark.html">Dark Style Two</a></li>
-                    </ul>
-                  </li>
-                  <li><a href="index-1-rtl.html">RTL Style One</a></li>
-                </ul>
-              </li>
-              <li class="dropdown"><a href="#">Rooms & Suites</a>
-                <ul>
-                  <li><a href="page-rooms.html">Rooms</a></li>
-                  <li><a href="page-rooms-suite.html">Rooms and Suits</a></li>
-                  <li><a href="room-details.html">Room Details</a></li>
-                </ul>
-              </li>
-              <li class="dropdown"><a href="#">Pages</a>
-                <ul>
-                  <li><a href="page-about.html">About</a></li>
-                  <li><a href="page-contact.html">Contact</a></li>
-                  <li><a href="page-faq.html">Faq</a></li>
-                  <li><a href="page-pricing.html">Pricing</a></li>
-                  <li><a href="page-testimonial.html">Testimonials</a></li>
-                  <li><a href="page-404.html">404</a></li>
-                  <li class="dropdown"><a href="#">Team</a>
-                    <ul>
-                      <li><a href="page-team.html">Team List</a></li>
-                      <li><a href="page-team-details.html">Team Details</a></li>
-                    </ul>
-                  </li>
-                  <li class="dropdown"><a href="#">Shop</a>
-                    <ul>
-                      <li><a href="shop-products.html">Products</a></li>
-                      <li><a href="shop-products-sidebar.html">Products with Sidebar</a></li>
-                      <li><a href="shop-product-details.html">Product Details</a></li>
-                      <li><a href="shop-cart.html">Cart</a></li>
-                      <li><a href="shop-checkout.html">Checkout</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li class="dropdown"><a href="#">News</a>
-                <ul>
-                  <li><a href="news-grid.html">News Grid</a></li>
-                  <li><a href="news-details.html">News Details</a></li>
-                </ul>
-              </li>
-              <li><a href="page-contact.html">Contact</a></li>
-            </ul>
-          </nav>
-          <!-- Main Menu End-->
-        </div>
-        <div class="outer-box">
-          <button class="search-btn">
-            <img src="images/icons/search.png" alt="Serch-Btn-Img">
-          </button>
-          <div class="mobile-nav-toggler"><i class="icon fa fa-bars"></i></div>
-          <!-- Mobile Nav toggler -->
-        </div>
-      </div>
-      <!-- Mobile Menu  -->
-      <div class="mobile-menu">
-        <div class="menu-backdrop"></div>
-        <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
-        <nav class="menu-box">
-          <div class="upper-box">
-            <div class="nav-logo"><a href="index-3.html"><img src="images/logo-2.png" alt="" title=""></a></div>
-            <div class="close-btn"><i class="icon fa fa-times"></i></div>
-          </div>
-          <ul class="navigation clearfix">
-            <!--Keep This Empty / Menu will come through Javascript-->
-          </ul>
-          <ul class="contact-list-one">
-            <li>
-              <!-- Contact Info Box -->
-              <div class="contact-info-box">
-                <i class="icon lnr-icon-phone-handset"></i>
-                <span class="title">Call Now</span>
-                <a href="tel:+92880098670">+92 (8800) - 98670</a>
-              </div>
-            </li>
-            <li>
-              <!-- Contact Info Box -->
-              <div class="contact-info-box">
-                <span class="icon lnr-icon-envelope1"></span>
-                <span class="title">Send Email</span>
-                <a href="mailto:help@company.com">help@company.com</a>
-              </div>
-            </li>
-            <li>
-              <!-- Contact Info Box -->
-              <div class="contact-info-box">
-                <span class="icon lnr-icon-clock"></span>
-                <span class="title">Send Email</span>
-                Mon - Sat 8:00 - 6:30, Sunday - CLOSED
-              </div>
-            </li>
-          </ul>
-          <ul class="social-links">
-            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-            <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
-            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-          </ul>
-        </nav>
-      </div><!-- End Mobile Menu -->
-      <!-- Header Search -->
-      <div class="search-popup">
-        <span class="search-back-drop"></span>
-        <button class="close-search"><span class="fa fa-times"></span></button>
-        <div class="search-inner">
-          <form method="post" action="https://kodesolution.com/html/2023/hoexr-html/index.html">
-            <div class="form-group">
-              <input type="search" name="search-field" value="" placeholder="Search..." required="">
-              <button type="submit"><i class="fa fa-search"></i></button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <!-- End Header Search -->
-
-      <!-- Sticky Header  -->
-      <div class="sticky-header">
-        <div class="auto-container">
-          <div class="inner-container">
-            <!--Logo-->
-            <div class="logo">
-              <a href="index-3.html" title=""><img src="images/logo-v5-black.png" alt="" title=""></a>
-            </div>
-            <!--Right Col-->
-            <div class="nav-outer">
-              <!-- Main Menu -->
-              <nav class="main-menu">
-                <div class="navbar-collapse show collapse clearfix">
-                  <ul class="navigation clearfix">
-                    <!--Keep This Empty / Menu will come through Javascript-->
-                  </ul>
-                </div>
-              </nav><!-- Main Menu End-->
-              <!--Mobile Navigation Toggler-->
-              <div class="mobile-nav-toggler"><span class="icon lnr-icon-bars"></span></div>
-            </div>
-          </div>
-        </div>
-      </div><!-- End Sticky Menu -->
-    </div>
-	</header>
+  <%- include('partials/header') %>
 	<!--End Main Header -->
 
 	<!-- Start main-content -->
@@ -276,11 +107,11 @@
 					<div class="slider-pager mt-3" style="border-radius: 50%;">
 						<ul class="thumb-box d-flex list-inline">
 							<% category.picture.forEach((pkg, index) => { %>
-							<li class="list-inline-item">
-								<a href="#" data-bs-target="#roomCarousel" data-bs-slide-to="<%= index %>" class="<%= index === 0 ? 'active' : '' %>">
-									<figure><img src="<%= pkg %>" alt="" class="img-thumbnail"></figure>
-								</a>
-							</li>
+								<li class="list-inline-item">
+									<a href="#" data-bs-target="#roomCarousel" data-bs-slide-to="<%= index %>" class="<%= index === 0 ? 'active' : '' %>">
+										<figure><img src="<%= pkg %>" alt="" class="img-thumbnail"></figure>
+									</a>
+								</li>
 							<% }); %>
 						</ul>
 					</div>
@@ -288,67 +119,70 @@
 
 				<div class="col-xl-4 col-lg-5">
 					<div class="sidebar one">
-						<h5>Give us your details</h5>
+						<h5>Check Availability</h5>
 						<div id="payment_status"></div>
 						<div class="sidebar__post mb-30">
 							
-							<form id="payment_form" name="contact_form" class="" >
+              <form id="payment_form" name="contact_form" class="payment_form" >
+                <style>
+                  .form-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #94081a;
+  box-shadow: 0 0 5px rgba(148, 8, 26, 0.5);
+}
+
+.date-pick::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.checkininputs {
+  background-color: #f8f9fa;
+}
+
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+
+                </style>
 								<div class="row">
 									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Check In</label>
-											<input readonly   name="start" class="form-control bg-white" type="text" placeholder="Arrive Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Check Out</label>
-											<input readonly  name="end" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<!-- <div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Guests</label>
-									    <select   value=""  class="form-select form-control bg-white">
-									     
-									    </select>
-										</div>
-									</div> -->
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Full name</label>
-											<input name="guest_name" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Phone</label>
-											<input name="guest_phone" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Email</label>
-											<input name="guest_email" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">address</label>
-											<input name="guest_address" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-								</div>
+                    <div class="mb-3">
+                      <label class="form-label" for="checkin-date">Check In</label>
+                      <input id="checkin-date" name="start" required class="form-control checkininputs" type="date" placeholder="Check in date" />
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="mb-3">
+                      <label class="form-label" for="checkout-date">Check Out</label>
+                      <input id="checkout-date" required class="form-control checkoutinput" type="date" placeholder="Check out date" />
+
+                  </div>
+                </div>
+                  
+									
 								<div class="mb-3">
 									<!-- <input name="form_botcheck" class="form-control" type="hidden" value=""> -->
-									<button type="submit" class="theme-btn btn-style-one w-100" data-loading-text="Please wait..."><span class="btn-title">Book Now</span></button>
+									<button id="checkAvailability" type="submit" class="theme-btn btn-style-one w-100" data-loading-text="Please wait..."><span class="btn-title">Book Now</span></button>
 								</div>
 							</form>
 						</div>
-						<div class="sidebar__single sidebar__post">
+						<!-- <div class="sidebar__single sidebar__post">
 							
 
-							</ul>
+							</ul> -->
 						</div>
 					</div>
 				</div>
@@ -419,116 +253,40 @@
 
 				<div class="col-xl-4 col-lg-5">
 					<div class="sidebar two">
-						<h5>Give us your details</h5>
+						<h5>Check Availability</h5>
 						<div id="payment_status"></div>
 						<div class="sidebar__post mb-30">
 							
-							<form id="payment_form" name="contact_form" class="" >
+							<form id="payment_form" name="contact_form" class="payment_form" >
 								<div class="row">
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Check In</label>
-											<input readonly   name="start" class="form-control bg-white" type="text" placeholder="Arrive Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Check Out</label>
-											<input readonly  name="end" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<!-- <div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Guests</label>
-									    <select   value=""  class="form-select form-control bg-white">
-									     
-									    </select>
-										</div>
-									</div> -->
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Full name</label>
-											<input name="guest_name" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Phone</label>
-											<input name="guest_phone" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">Email</label>
-											<input name="guest_email" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
-									<div class="col-sm-12">
-										<div class="mb-3">
-									    <label class="form-label">address</label>
-											<input name="guest_address" class="form-control bg-white" type="text" placeholder="Departure Date">
-										</div>
-									</div>
+                  <div class="col-sm-12">
+                    <div class="mb-3">
+                      <label class="form-label" for="checkin-date">Check In</label>
+                      <input id="checkin-date" name="start" required class="form-control checkininputs" type="date" placeholder="Check in date" />
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="mb-3">
+                      <label class="form-label" for="checkout-date">Check Out</label>
+                      <input id="checkout-date" required class="form-control checkoutinput" type="date" placeholder="Check out date" />
+
+                  </div>
+						
 								</div>
 								<div class="mb-3">
 									<!-- <input name="form_botcheck" class="form-control" type="hidden" value=""> -->
-									<button type="submit" class="theme-btn btn-style-one w-100" data-loading-text="Please wait..."><span class="btn-title">Book Now</span></button>
+									<button id="checkAvailability" type="submit" class="theme-btn btn-style-one w-100" data-loading-text="Please wait..."><span class="btn-title">Book Now</span></button>
 								</div>
 							</form>
 						</div>
-						<div class="sidebar__single sidebar__post">
+						<!-- <div class="sidebar__single sidebar__post">
 							
 
 							</ul>
-						</div>
+						</div> -->
 					</div>
 				</div>
 
-
-	
-					<!-- <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-40 pb-40 border-top">
-						<h6 class="my-sm-0">Share Details</h6>
-						<div class="blog-details__social-list">
-							<a href="#"><i class="fab fa-twitter"></i></a>
-							<a href="#"><i class="fab fa-facebook"></i></a>
-							<a href="#"><i class="fab fa-pinterest-p"></i></a>
-							<a href="#"><i class="fab fa-instagram"></i></a>
-						</div>
-					</div> -->
-	
-					<!-- Contact form -->
-					<!-- <div class="p-4 p-lg-5 bg-light">
-						<h4 class="mt-0">Send Us Your Question</h4>
-						<form id="contact_form" name="contact_form" class="" action="your_action_url" method="post">
-							<div class="row">
-								<div class="col-sm-6 col-xl-4">
-									<div class="mb-3">
-										<input name="form_name" class="form-control bg-white" type="text" placeholder="Enter Name">
-									</div>
-								</div>
-								<div class="col-sm-6 col-xl-4">
-									<div class="mb-3">
-										<input name="form_email" class="form-control bg-white required email" type="email" placeholder="Enter Email">
-									</div>
-								</div>
-								<div class="col-xl-4">
-									<div class="mb-3">
-										<input name="form_phone" class="form-control bg-white required phone" type="number" placeholder="Enter Phone">
-									</div>
-								</div>
-							</div>
-							<div class="mb-3">
-								<textarea name="form_message" class="form-control bg-white required" rows="5" placeholder="Enter Message"></textarea>
-							</div>
-							<div class="mb-0">
-								<input name="form_botcheck" class="form-control" type="hidden" value="">
-								<button type="submit" class="theme-btn btn-style-one" data-loading-text="Please wait...">
-									<span class="btn-title">Submit Comment</span>
-								</button>
-							</div>
-						</form>
-					</div>
-					 -->
 				</div>
 
 				
@@ -586,7 +344,7 @@
                     <div class="post-info"><i class="fas fa-phone"></i> 1800-121-3637</div>
                     <div class="post-info">+91-7052-101-786</div>
                     <div class="post-info"><i class="fa fa-envelope"></i> info@example.com</div>
-                    <div class="post-info"><i class="fas fa-location"></i> 1247/Plot No. 39, 15th Phase, <br>United States of America</div>
+                    <div class="post-info"><i class="fas fa-location"></i> 6 Adeniyi Street Itire Lagos, <br>Lagos State, Nigeria</div>
                   </div>
                 </article>
               </div>
@@ -640,31 +398,96 @@
 <script src="js/jquery.validate.min.js"></script>
 <script src="js/jquery.form.min.js"></script>
 <script>
-// (function($) {
-// 	$("#contact_form").validate({
-// 		submitHandler: function(form) {
-// 			var form_btn = $(form).find('button[type="submit"]');
-// 			var form_result_div = '#form-result';
-// 			$(form_result_div).remove();
-// 			form_btn.before('<div id="form-result" class="alert alert-success" role="alert" style="display: none;"></div>');
-// 			var form_btn_old_msg = form_btn.html();
-// 			form_btn.html(form_btn.prop('disabled', true).data("loading-text"));
-// 			$(form).ajaxSubmit({
-// 				dataType: 'json',
-// 				success: function(data) {
-// 					if (data.status == 'true') {
-// 						$(form).find('.form-control').val('');
-// 					}
-// 					form_btn.prop('disabled', false).html(form_btn_old_msg);
-// 					$(form_result_div).html(data.message).fadeIn('slow');
-// 					setTimeout(function() { $(form_result_div).fadeOut('slow') }, 6000);
-// 				}
-// 			});
-// 		}
-// 	});
-// })(jQuery);
+ document.querySelectorAll('.payment_form').forEach(d => {
+  d.addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    
+    function formatDate(dateStr) {
+      const [year, month, day] = dateStr.split('-'); // Split by "-"
+      return `${day}-${month}-${year}`; // Rearrange to DD-MM-YYYY
+    }
 
+    // Get the values from the form fields
+    const checkInDate = event.target.querySelector('.checkininputs').value;
+    const checkOutDate = event.target.querySelector('.checkoutinput').value;
+    
+    // Debugging to check values
+    console.log("Check-in Date:", checkInDate);
+    console.log("Check-out Date:", checkOutDate);
 
+    if (!checkInDate || !checkOutDate) {
+      // Display an alert if either date is missing
+      alert('Please fill in both check-in and check-out dates.');
+      return;
+    }
+    
+    const formattedCheckInDate = formatDate(checkInDate);
+    const formattedCheckOutDate = formatDate(checkOutDate);
+
+    const url = new URL(window.location.href);
+    const id = url.searchParams.get('id');
+    const loginBtn = document.getElementById('checkAvailability');
+    
+    // Show the loader
+    loginBtn.innerHTML = '<span class="loader"></span>';
+    loginBtn.disabled = true;
+
+    // Create an object with the form data
+    const formData = {
+      start: formattedCheckInDate,
+      end: formattedCheckOutDate,
+      category_id: parseInt(id)
+    };
+    console.log("Form Data:", formData);
+
+    try {
+      // Post the form data to the /check-availability endpoint
+      const response = await fetch(`/check-availability/?end=${formData.end}&start=${formData.start}&category_id=${formData.category_id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      function toster(message, color) {
+        Toastify({
+          text: message,
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "center",
+          style: { background: color },
+        }).showToast();
+      }
+
+      // Handle the response from the server
+      if (response.ok) {
+        const data = await response.json();
+        loginBtn.innerHTML = 'check now';
+        loginBtn.disabled = false;
+
+        if (data?.data.availableRoomDetails.length > 0) {
+          toster(data.message, "green");
+          const all = data.data.availableRoomDetails.map(data => `${data.room_number}`);
+          setTimeout(() => {
+            window.location.href = `/available-rooms?id=${data.data.category_id}&data=${all.toString()}&start=${formData.start}&end=${formData.end}`;
+          }, 1000);
+        } else {
+          loginBtn.innerHTML = "Submit";
+          toster(data.message, "red");
+        }
+      } else {
+        loginBtn.innerHTML = "Submit";
+        toster(response.statusText, "red");
+      }
+    } catch (error) {
+      loginBtn.innerHTML = "Submit";
+      toster(error.message, "red");
+      console.error('Error:', error);
+    }
+  });
+});
 
 </script>
 </body>

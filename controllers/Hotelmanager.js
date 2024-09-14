@@ -91,6 +91,10 @@ const clientHotelRoom = asynchandler(async (req,res) => {
         pkgs: pkgs,
       });
 })
+const contact = asynchandler(async (req,res) => {
+   
+    return res.render('page-contact');
+})
 
 const paymentResult = asynchandler(async (req, res) => {
     console.log("===========", req.query);
@@ -141,14 +145,24 @@ const clientRoomAvailable = asynchandler(async (req, res) => {
 });
 
 const clientRoom = asynchandler(async (req, res) => {
-    const { id } = req.query;
+    
+
+    if (req.query.id) {
+        const { id } = req.query;
+        const category = await Room.findOne({where:{_id:id}});
+        const count = await RoomNumber.count({where:{category_id:id}});
+
+    return res.render('room-details-one', { category: category.dataValues,count}); 
+    }
+
+    const category = await Room.findAll({});
+    console.log("🚀 ~ clientRoom ~ category:", category)
+
+    return res.render('rooms', { categories: category});
 
     // Room.belongsTo(RoomNumber,{foreignKey:'_id',targetKey:"category_id" });
 
-    const category = await Room.findOne({where:{_id:id}});
-    const count = await RoomNumber.count({where:{category_id:id}});
-
-    return res.render('room-details-one', { category: category.dataValues,count});
+   
 });
 
 
@@ -157,6 +171,8 @@ const clientRoom = asynchandler(async (req, res) => {
 
 const GetAvailability = asynchandler(async (req, res) => {
     let { category_id, start, end } = req.query;
+    console.log("🚀 ~ GetAvailability ~ end:", end)
+    console.log("🚀 ~ GetAvailability ~ start:", start)
 
     // Get the current date in the format 'YYYY-MM-DD'
     const currentDate = moment().format("YYYY-MM-DD");
@@ -256,7 +272,8 @@ const GetAvailability = asynchandler(async (req, res) => {
                 availableRoomDetails,
                 totalRooms,
                 bookedRooms,
-                category_id
+                category_id,
+                
             }
         });
     }
@@ -264,7 +281,10 @@ const GetAvailability = asynchandler(async (req, res) => {
     return res.json({
         message: "No room available in this category",
         status: false,
+        start,
+        end,
         data: {
+            
             availableRooms,
             availableRoomDetails,
             totalRooms,
@@ -496,7 +516,8 @@ module.exports = {
     clientRoomAvailable,
     paymentResult,
     GetAvailabilityToday,
-    clientRoom
+    clientRoom,
+    contact
 };
 
 

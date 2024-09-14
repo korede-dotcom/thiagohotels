@@ -238,11 +238,7 @@ button:hover {
 						<div class="room-container">
 							<!-- Room Boxes -->
 <% categories.forEach(element => { %>
-    <div class="room-box <%= element.status ? 'booked' : 'available' %>"
-        <% if (!element.status) { %>
-            onclick="openModal('<%= element.room_number %>', '<%= element.room_name %>', '<%= element.status ? 'Booked' : 'Available' %>','<%= element._id %>')"
-        <% } %>
-    >
+    <div class="room-box <%= element.status ? 'booked' : 'available' %>"onclick="openModal('<%= element.room_number %>', '<%= element.room_name %>', '<%= element.status ? 'Booked' : 'Available' %>','<%= element._id %>')">
         <i class="fas <%= element.status ? 'fa-key' : 'fa-door-open' %>"></i>
         <div class="room-info">
             <h2>Room <%= element.room_number %> </h2>
@@ -483,7 +479,11 @@ button:hover {
             document.getElementById('modalRoomStatus').style.display = "none";
             submitButton.style.display = "none";
             
-                } else {
+                }else if(paymentmode === "Cash"){
+                    showToast(data.message, "green");
+                    window.location.reload();
+                }               
+                else {
                     showToast("paymentlink sent to customers email and phonenumber", "green");
                 }
             });

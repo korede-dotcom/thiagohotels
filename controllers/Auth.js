@@ -53,40 +53,39 @@ const createSendTokens = (user, statusCode, res) => {
     });
 };
 
-const Login =  async (req,res) => {
-    const user = await User.findOne({ where: { email: req.body.email } });
+const Login = async (req, res) => {
+    try {
+        // Find user by email
+        const user = await User.findOne({ where: { email: req.body.email } });
 
-    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-        return res.status(401).json({
-            data:{
+        // Check if user exists and password is correct
+        if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+            return res.status(401).json({
                 status: false,
                 message: 'Incorrect email or password',
-            }
-        });
-      }
-  
-    if (user) {
-        // const userJson = user.toJSON();
-        // delete userJson.password;
-        //  createSendToken(userJson,200,res)
-        //  const token = createSendToken(userJson, 200, res);
+            });
+        }
 
-         const userJson = user.toJSON();
-         delete userJson.password;
-         req.user = user;
-         createSendTokens(userJson, 200, res);
+        // User exists and password is correct
+        const userJson = user.toJSON();
+        delete userJson.password;  // Remove password from the response object
 
-    } else {
-        return res.status(200).json({
-            status:false,
-            message:"incorrect email or password",
-            data:{
-                status:false,
-            message:"invalid email or password",
-            }
+        // Attach user to request object
+        req.user = user;
+
+        // Generate and send token to user
+        createSendTokens(userJson, 200, res);
+    } catch (error) {
+        console.error("Error during login:", error);
+
+        // Send error response
+        return res.status(500).json({
+            status: false,
+            message: 'An error occurred during login',
         });
     }
-}
+};
+
 
 
 const ResetPassword = asynchandler( async (req,res)=> {
