@@ -15,7 +15,7 @@ const cron = require('node-cron');
 const { Sequelize,Op } = require('sequelize');
 const nodemailer = require('nodemailer');
 const SendEmail = require('./utils/sendEmail');
-
+const User = require('./models/User');
 
 require('dotenv').config();
 
@@ -32,6 +32,17 @@ app.use(cors());
       { mode: 'Cash', status: true }
     ];
     // 0 12 * * *
+
+    async function seed () {
+        
+      const seedAdmin = await User.findOne({where:{roleId:1}})
+      const hashed = await bcrypt.hash(process.env.adminPassword,10)
+      if (!seedAdmin) {
+          const createAdmin = await User.create({role_id:1,email:process.env.adminEmail,password:hashed,name:process.env.adminName})
+          console.log("🚀 ~ seed ~ createAdmin:", createAdmin)
+      }
+  }
+      seed()
 
     cron.schedule('0 12 * * *', async () => {
       try {
