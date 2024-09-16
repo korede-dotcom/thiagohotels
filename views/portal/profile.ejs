@@ -18,13 +18,14 @@
 						<div class="profile-header">
 							<div class="row align-items-center">
 								<div class="col-auto profile-image">
-									<a href="#"> <img class="rounded-circle" alt="User Image" src="assets/img/profiles/avatar-02.jpg"> </a>
+									<a href="#"> <img class="rounded-circle" alt="User Image" src="assets/img/hotel_logo.png"> </a>
 								</div>
 								<div class="col ml-md-n2 profile-user-info">
-									<h4 class="user-name mb-3">David Alvarez</h4>
-									<h6 class="text-muted mt-1">Manager</h6>
-									<div class="user-Location mt-1"><i class="fas fa-map-marker-alt"></i> Florida, United States</div>
-									<div class="about-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+									<!-- <h4 class="user-name mb-3"><%=name %></h4> -->
+									<!-- <div class="user-Location mt-1"><i class="fas fa-map-marker-alt"></i> Florida, United States</div> -->
+									<div class="about-text">
+										<h1><%= roleName %></h1>
+									</div>
 								</div>
 								<div class="col-auto profile-btn"> <a href="" class="btn btn-primary">
 								Message
@@ -47,31 +48,26 @@
 											<div class="card-body">
 												<h5 class="card-title d-flex justify-content-between">
 													<span>Personal Details</span>
-													<a class="edit-link" data-toggle="modal" href="#edit_personal_details"><i class="fa fa-edit mr-1"></i>Edit</a>
+													<!-- <a class="edit-link" data-toggle="modal" href="#edit_personal_details"><i class="fa fa-edit mr-1"></i>Edit</a> -->
 													</h5>
 												<div class="row mt-5">
 													<p class="col-sm-3 text-sm-right mb-0 mb-sm-3">Name</p>
-													<p class="col-sm-9">David Alvarez</p>
+													<p class="col-sm-9"><%=name %></p>
 												</div>
 												<div class="row">
-													<p class="col-sm-3 text-sm-right mb-0 mb-sm-3">Date of Birth</p>
-													<p class="col-sm-9">24 Jul 1983</p>
+													<p class="col-sm-3 text-sm-right mb-0 mb-sm-3">Role</p>
+													<p class="col-sm-9"><%=roleName %></p>
 												</div>
 												<div class="row">
 													<p class="col-sm-3 text-sm-right mb-0 mb-sm-3">Email ID </p>
-													<p class="col-sm-9"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="caaeabbca3aeaba6bcabb8afb08aafb2aba7baa6afe4a9a5a7">[email&#160;protected]</a></p>
+													<p class="col-sm-9"><%=email %></p>
 												</div>
-												<div class="row">
-													<p class="col-sm-3 text-sm-right mb-0 mb-sm-3">Mobile</p>
-													<p class="col-sm-9">305-310-5857</p>
-												</div>
+												<% if (roleName !== "ceo") { %>
 												<div class="row">
 													<p class="col-sm-3 text-sm-right mb-0">Address</p>
-													<p class="col-sm-9 mb-0">4663 Agriculture Lane,
-														<br> Miami,
-														<br> Florida - 33165,
-														<br> United States.</p>
+													<p class="col-sm-9 mb-0">4663 Agriculture Lane</p>
 												</div>
+												<% } %>
 											</div>
 										</div>
 										<div class="modal fade" id="edit_personal_details" aria-hidden="true" role="dialog">
@@ -146,7 +142,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-lg-6">
+									<!-- <div class="col-lg-6">
 										<div class="card">
 											<div class="card-body">
 												<h5 class="card-title d-flex justify-content-between">
@@ -249,7 +245,7 @@
 												</div>
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>
 							</div>
 							<div id="password_tab" class="tab-pane fade">
@@ -258,18 +254,134 @@
 										<h5 class="card-title">Change Password</h5>
 										<div class="row">
 											<div class="col-md-10 col-lg-6">
-												<form>
+												<form id="changePasswordForm">
 													<div class="form-group">
-														<label>Old Password</label>
-														<input type="password" class="form-control"> </div>
+													  <label>Old Password</label>
+													  <input type="password" id="oldPassword" class="form-control" required>
+													</div>
 													<div class="form-group">
-														<label>New Password</label>
-														<input type="password" class="form-control"> </div>
+													  <label>New Password</label>
+													  <input type="password" id="newPassword" class="form-control" required>
+													</div>
 													<div class="form-group">
-														<label>Confirm Password</label>
-														<input type="password" class="form-control"> </div>
+													  <label>Confirm Password</label>
+													  <input type="password" id="confirmPassword" class="form-control" required>
+													</div>
+													<div class="form-group">
+													  <input type="checkbox" id="togglePassword" onclick="togglePasswordVisibility()"> Show Password
+													</div>
 													<button class="btn btn-primary" type="submit">Save Changes</button>
-												</form>
+												  </form>
+												  
+												  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+												  <script>
+													function togglePasswordVisibility() {
+													  const oldPassword = document.getElementById('oldPassword');
+													  const newPassword = document.getElementById('newPassword');
+													  const confirmPassword = document.getElementById('confirmPassword');
+													  const type = oldPassword.type === 'password' ? 'text' : 'password';
+													  oldPassword.type = type;
+													  newPassword.type = type;
+													  confirmPassword.type = type;
+													}
+												  
+													document.getElementById('changePasswordForm').addEventListener('submit', async function(event) {
+													  event.preventDefault();
+												  
+													  const oldPassword = document.getElementById('oldPassword').value;
+													  const newPassword = document.getElementById('newPassword').value;
+													  const confirmPassword = document.getElementById('confirmPassword').value;
+												  
+													  // Validate new password match
+													  if (newPassword !== confirmPassword) {
+														Toastify({
+														  text: "New Password and Confirm Password do not match!",
+														  duration: 3000,
+														  close: true,
+														  gravity: "top",
+														  position: "center",
+														  stopOnFocus: true,
+														  style: {
+															background: "linear-gradient(to right, #FF5F6D, #FFC371)",
+														  }
+														}).showToast();
+														return;
+													  }
+												  
+													  // Validate old password is not empty
+													  if (!oldPassword) {
+														Toastify({
+														  text: "Old Password is required!",
+														  duration: 3000,
+														  close: true,
+														  gravity: "top",
+														  position: "center",
+														  stopOnFocus: true,
+														  style: {
+															background: "linear-gradient(to right, #FF5F6D, #FFC371)",
+														  }
+														}).showToast();
+														return;
+													  }
+												  
+													  // Post the data to /auth/change-self-password
+													  try {
+														const response = await fetch('/auth/change-self-password', {
+														  method: 'POST',
+														  headers: { 'Content-Type': 'application/json' },
+														  body: JSON.stringify({ password:oldPassword, newPassword ,confirmPassword})
+														});
+														const data = await response.json();
+												  
+														// Handle the response
+														if (data.status === true) {
+														  Toastify({
+															text: data.message,
+															duration: 3000,
+															close: true,
+															gravity: "top",
+															position: "center",
+															stopOnFocus: true,
+															style: {
+															  background: "linear-gradient(to right, #00b09b, #96c93d)",
+															}
+														  }).showToast();
+														  
+														  // Redirect to another page if needed
+														  setTimeout(() => {
+															window.location.href = '/portal'; // Change to your redirect page
+														  }, 3000);
+												  
+														} else {
+														  Toastify({
+															text: data.message || "An error occurred!",
+															duration: 3000,
+															close: true,
+															gravity: "top",
+															position: "center",
+															stopOnFocus: true,
+															style: {
+															  background: "linear-gradient(to right, #FF5F6D, #FFC371)",
+															}
+														  }).showToast();
+														}
+													  } catch (error) {
+														// Handle any request errors
+														Toastify({
+														  text: "Request failed, please try again.",
+														  duration: 3000,
+														  close: true,
+														  gravity: "top",
+														  position: "center",
+														  stopOnFocus: true,
+														  style: {
+															background: "linear-gradient(to right, #FF5F6D, #FFC371)",
+														  }
+														}).showToast();
+													  }
+													});
+												  </script>
+												  
 											</div>
 										</div>
 									</div>

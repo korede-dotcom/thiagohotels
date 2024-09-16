@@ -18,6 +18,8 @@ const DrinkLog = require("../models/DrinksLog");
 const {Op} = require("sequelize");
 const sequelize = require("sequelize");
 const SendEmail = require("../utils/sendEmail");
+const ResetPassword = require("../models/ResetPassword");
+const Marque = require("../models/Marque");
 
 routes.get("/",async (req,res) => {
             res.render('login', {
@@ -533,23 +535,86 @@ routes.post("/check-in", checkAuthCookie, expressAsyncHandler( async (req, res) 
   }))
 
   routes.get("/all-staff",checkAuthCookie,expressAsyncHandler(async (req, res) => {
-      // if (req.query.id && req.query.status) {
-      //   const updateRoomCategory = await RoomCategory.update({status:req.query.status},{where: {_id: req.query.id}})
-      //   if (updateRoomCategory) {
-      //       const findRoomCategory = await RoomCategory.findAll()
-      //       console.log("��� ~ routes.get ~ findRoomCategory:", findRoomCategory)
-      //       return res.render('room-category', {
-      //             name: req.user.name,
-      //             email: req.user.email,
-      //             roleName: req.user.roleName,
-      //             roomcategories:findRoomCategory
-      //       })
-      //   }
-      // }
-      // const findRoomCategory = await RoomCategory.findAll()
       Staff.belongsTo(User,{foreignKey:"user_id"})
-      const staffs = await Staff.findAll({include:{model:User}})
-      staffs.forEach(user => console.log(user.user.name))
+      const staffs = await Staff.findAll({
+            include: { model: User },
+            order: [
+                ['createdAt', 'ASC'], // Primary sort column
+                ['user', 'name', 'ASC'] // Secondary sort column
+            ]
+        });
+      if (req.query.id && req.query.type) {
+            let update;
+            switch (req.query.type) {
+                  case "activate":
+                         update = await User.update({status:true},{where: {_id: req.query.id}})
+                        if (update) {
+                              return res.render('all-staff', {
+                                    name: req.user.name,
+                                    email: req.user.email,
+                                    roleName: req.user.roleName,
+                                    staffs:staffs
+                                 
+                              })
+                        } else {
+                              return res.render('all-staff', {
+                                    name: req.user.name,
+                                    email: req.user.email,
+                                    roleName: req.user.roleName,
+                                    staffs:staffs
+                                 
+                              })
+                        }
+                        break;
+                  case "suspend":
+                         update = await User.update({status:false},{where: {_id: req.query.id}})
+                        if (update) {
+                              return res.render('all-staff', {
+                                    name: req.user.name,
+                                    email: req.user.email,
+                                    roleName: req.user.roleName,
+                                    staffs:staffs
+                                 
+                              })
+                        } else {
+                              return res.render('all-staff', {
+                                    name: req.user.name,
+                                    email: req.user.email,
+                                    roleName: req.user.roleName,
+                                    staffs:staffs
+                                 
+                              })
+                        }
+                        break;
+            
+                  default:
+                         update = await User.update({status:false},{where: {_id: req.query.id}})
+                        if (update) {
+                              return res.render('all-staff', {
+                                    name: req.user.name,
+                                    email: req.user.email,
+                                    roleName: req.user.roleName,
+                                    staffs:staffs
+                                 
+                              }) 
+                        } else {
+                              return res.render('all-staff', {
+                                    name: req.user.name,
+                                    email: req.user.email,
+                                    roleName: req.user.roleName,
+                                    staffs:staffs
+                                 
+                              })
+                        }
+                      
+                        break;
+            }
+            
+
+      }
+      
+        
+      // staffs.forEach(user => console.log(user.user.name))
       // console.log("🚀 ~ routes.get ~ staffs:", staffs)
       return res.render('all-staff', {
             name: req.user.name,
@@ -608,7 +673,46 @@ routes.post("/add-staff",checkAuthCookie,expressAsyncHandler(async (req, res) =>
             // designation: req.body.designation,
       },{transaction})
       await transaction.commit()
-      SendEmail("welcome on board", ``,`<p>Hi ${saveUser.name}, your welcome as our new staff at thiago Hotel and Suites we would love to witness your full commitment to your area of work here is your login credentials ${saveUser.email} password:${randPass}</p>`,saveUser.email)
+     
+
+          const sendEmail = await SendEmail(
+            "Welcome On Board",
+            "",
+            `
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 40px 0;">
+              <tr>
+                <td align="center">
+                  <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <tr>
+                      <td align="center" style="background-color: #94081a; padding: 20px;">
+                        <h2 style="color: #ffffff; font-size: 24px; margin: 0;">Welcome Aboard!</h2>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 20px; color: #333;">
+                        <p style="font-size: 16px; margin-bottom: 20px;">Hi ${saveUser.name},</p>
+                        <p style="font-size: 16px; margin-bottom: 20px;">Welcome to Thiago Hotel and Suites! We're excited to have you as our new staff member with role ${saveUser.roleName} . Below are your login credentials:</p>
+                        <p style="font-size: 16px; margin-bottom: 20px;">Email: ${saveUser.email}</p>
+                        <p style="font-size: 16px; margin-bottom: 20px;">Password: ${randPass}</p>
+                        <p style="font-size: 16px; margin-top: 20px;">You can log in to your account here: <a href="https://thiagohotelandsuites.com/portal" style="color: #94081a; text-decoration: underline;">Thiago Hotel and Suites Portal</a></p>
+                        <p style="font-size: 16px; margin-top: 20px;">If you have any questions, feel free to reach out to us.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="center" style="background-color: #f4f4f4; padding: 20px; color: #666; font-size: 14px;">
+                        <p style="margin: 0;">Best regards,</p>
+                        <p style="margin: 5px 0 0;">Thiago Hotel and Suites</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+            `,
+            saveUser.email,
+            "thiagohotelandsuites@gmail.com"
+        );
+        
       // sendSMS
       return res.status(201).json({
             status: true,
@@ -618,11 +722,44 @@ routes.post("/add-staff",checkAuthCookie,expressAsyncHandler(async (req, res) =>
 
 }))
 
+
+routes.get("/info-promotion-create",checkAuthCookie,expressAsyncHandler(async  (req, res) => {
+      const promotions = await Marque.findAll({
+         
+      });
+      res.render("promotions", {
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+      })
+}))
+routes.post("/info-promotion-create",checkAuthCookie,expressAsyncHandler(async  (req, res) => {
+      
+
+      const promotions = await Marque.create(req.body);
+      return res.status(201).json({
+            status: true,
+            message: 'Promotion created successfully',
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+          });
+}))
+routes.get("/info-promotion",checkAuthCookie,expressAsyncHandler(async  (req, res) => {
+      const promotions = await Marque.findAll({
+         
+      });
+      res.render("all-promos", {
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+            data:promotions
+      })
+}))
+
 routes.get("/bar",checkAuthCookie,expressAsyncHandler(async (req,res) => {
       const drinks = await Drink.findAll({
-            order: [
-              ['createdAt', 'DESC']
-            ]
+         
       });
       res.render("barRecent", {
             name: req.user.name,
@@ -829,7 +966,43 @@ routes.post("/bar-buy", checkAuthCookie, expressAsyncHandler(async (req, res) =>
         return res.status(500).json({ status: false, message: error.message });
       }
     }));
+
+routes.get("/forgot-password",expressAsyncHandler(async (req,res) => {
+      res.render("forgot-password")
+}))
+routes.get("/first-time",expressAsyncHandler(async (req,res) => {
+      res.render("firsttime")
+}))
+
+routes.get("/recovery",expressAsyncHandler(async (req,res) => {
+       const id = req.query.id;
+
+       if (!id) {
+            return  res.redirect('/portal')
+        }
+       const resetPassword = await ResetPassword.findOne({
+            where: {
+              token: id,
+              expiresAt: { [Op.gt]: new Date() } // Op is Sequelize operator
+            }
+          });
+          
+          if (!resetPassword) {
+            return res.render("recovery",{status:false})
+          }
     
+     
+      return res.render("recovery",{status:true})
+}))
+
+routes.get("/profile",checkAuthCookie,expressAsyncHandler(async (req,res) => {
+      res.render("profile",{
+            name: req.user.name,
+            email: req.user.email,
+            roleName: req.user.roleName,
+            _id: req.user._id
+      })
+}))
     
 
 

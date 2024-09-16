@@ -53,39 +53,51 @@ const createSendTokens = (user, statusCode, res) => {
     });
 };
 
-const Login = async (req, res) => {
-    try {
-        // Find user by email
-        const user = await User.findOne({ where: { email: req.body.email } });
+const Login =  async (req,res) => {
+    const user = await User.findOne({ where: { email: req.body.email } });
 
-        // Check if user exists and password is correct
-        if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-            return res.status(401).json({
+
+    if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+        return res.status(401).json({
+            data:{
                 status: false,
                 message: 'Incorrect email or password',
+            }
+        });
+    }
+  
+    if (user) {
+        // const userJson = user.toJSON();
+        // delete userJson.password;
+        //  createSendToken(userJson,200,res)
+        //  const token = createSendToken(userJson, 200, res);
+        if (!user.verified) {
+            return res.status(401).json({
+                data:{
+                    status: false,
+                    message: "welcome onboard it's your first time login please change your password",
+                    errorCode: '01',
+                    user_id: user._id
+                }
             });
         }
 
-        // User exists and password is correct
-        const userJson = user.toJSON();
-        delete userJson.password;  // Remove password from the response object
+         const userJson = user.toJSON();
+         delete userJson.password;
+         req.user = user;
+         createSendTokens(userJson, 200, res);
 
-        // Attach user to request object
-        req.user = user;
-
-        // Generate and send token to user
-        createSendTokens(userJson, 200, res);
-    } catch (error) {
-        console.error("Error during login:", error);
-
-        // Send error response
-        return res.status(500).json({
-            status: false,
-            message: 'An error occurred during login',
+    } else {
+        return res.status(200).json({
+            status:false,
+            message:"incorrect email or password",
+            data:{
+                status:false,
+            message:"invalid email or password",
+            }
         });
     }
-};
-
+}
 
 
 const ResetPassword = asynchandler( async (req,res)=> {
@@ -93,7 +105,7 @@ const ResetPassword = asynchandler( async (req,res)=> {
     
     return res.status(200).json({
         status:true,
-        message:"otp has been sent to your phonenumber",
+        message:"otp has been sent to your email address",
         send
     });
 
@@ -109,6 +121,101 @@ const changePass = asynchandler( async (req,res)=> {
         send
     });
 
+})
+
+const changeUserPass = asynchandler(async (req,res) => {
+    const {password, newPassword,confirmPassword} = req.body;
+
+    if(!password ||!newPassword ||!confirmPassword){
+        return res.status(400).json({
+            status:false,
+            message:"all fields are required",
+        })
+    }
+
+    if(newPassword!== confirmPassword){
+        return res.status(400).json({
+            status:false,
+            message:"passwords do not match",
+        })
+    }
+
+    const user = await User.findOne({where:{_id:req.user._id}})
+
+    if(!user){
+        return res.status(400).json({
+            status:false,
+            message:"user not found",
+        })
+    }
+
+    const match = await bcrypt.compare(password, user.password)
+
+    if(!match){
+        return res.status(400).json({
+            status:false,
+            message:"incorrect password",
+        })
+    }
+
+   
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const updated = await User.update({ password: hashedPassword }, { where: { _id: req.user._id },returning:true });
+    return res.status(200).json({
+        status:true,
+        message:"password reset successfully",
+        updated
+    });
+})
+const changeUserFirsTimePass = asynchandler(async (req,res) => {
+    const {password,confirmPassword,token} = req.body;
+
+    const findUser = await User.findOne({where:{_id:token}});
+    if (!findUser) {
+        return res.status(400).json({
+            status:false,
+            message:"Invalid user",
+        })
+    }
+
+    if (findUser.verified) {
+        return res.status(400).json({
+            status:false,
+            message:"this action has already been done",
+        })
+    }
+
+    if(!password ||!confirmPassword){
+        return res.status(400).json({
+            status:false,
+            message:"all fields are required",
+        })
+    }
+
+    if(password!== confirmPassword){
+        return res.status(400).json({
+            status:false,
+            message:"passwords do not match",
+        })
+    }
+
+    const user = await User.findOne({where:{_id:token}})
+
+    if(!user){
+        return res.status(400).json({
+            status:false,
+            message:"user not found",
+        })
+    }
+
+   
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const updated = await User.update({ password: hashedPassword,verified:true,status:true }, { where: { _id: token },returning:true });
+    return res.status(200).json({
+        status:true,
+        message:"password reset successfully",
+        updated
+    });
 })
 
 
@@ -215,6 +322,8 @@ module.exports = {
     refreshToken,
     Login,
     ResetPassword,
-    changePass
+    changePass,
+    changeUserPass,
+    changeUserFirsTimePass
 }
    

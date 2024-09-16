@@ -33,7 +33,7 @@ app.use(cors());
     ];
     // 0 12 * * *
 
-    cron.schedule('* 12 * * *', async () => {
+    cron.schedule('0 12 * * *', async () => {
       try {
         const now = new Date();        
         const { Op } = require('sequelize');

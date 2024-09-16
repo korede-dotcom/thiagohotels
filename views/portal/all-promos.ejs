@@ -1,0 +1,86 @@
+﻿<%- include('partial/header', { title: 'thiagohotelsportal',email:email,roleName:roleName }) %>
+<%- include('partial/sidebar', { name: name}) %>
+		<div class="page-wrapper">
+			<div class="content container-fluid">
+				<div class="page-header">
+					<div class="row align-items-center">
+						<div class="col">
+							<div class="mt-5">
+								<% if (roleName !== 'hotel receptionist') { %>
+								<h4 class="card-title float-left mt-2">All Promos</h4> <a href="/portal/info-promotion-create" class="btn btn-primary float-right veiwbutton">Add Promos</a> </div>
+								<% } else { %>
+									<h4 class="card-title float-left mt-2">All Promos</h4>
+                                <!-- <h4 class="card-title float-left mt-2">My Promos</h4> <a href="/portal/my-Promos" class="btn btn-primary float-right veiwbutton">View All</a> </div> -->
+                                <% } %>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="card card-table">
+							<div class="card-body booking_card">
+								<div class="table-responsive">
+									<table class="datatable table table-stripped table table-hover table-center mb-0">
+										<thead>
+											<tr>
+												<th> ID</th>
+												<th>text</th>
+												<th>StartDate</th>
+												<th>EndDte</th>
+												
+											
+											
+											</tr>
+										</thead>
+										<tbody>
+											<% data.forEach(result => { %>
+											
+											<tr>
+												<td><%=result._id%></td>
+												
+												<td><%= result.text %></td>
+											
+												<td><%= new Date(result.startTime).toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(/,/g, '') %></td>
+
+<td><%= new Date(result.endTime).toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(/,/g, '') %></td>
+
+												
+											
+											</tr>
+												
+											<% }) %>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="delete_asset" class="modal fade delete-modal" role="dialog">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-body text-center"> <img src="assets/img/sent.png" alt="" width="50" height="46">
+							<h3 class="delete_class">Are you sure want to delete this Asset?</h3>
+							<div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+								<button type="submit" class="btn btn-danger">Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script data-cfasync="false" src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+	<script src="assets/js/jquery-3.5.1.min.js"></script>
+	<script src="assets/js/popper.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/plugins/raphael/raphael.min.js"></script>
+	<script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="assets/plugins/datatables/datatables.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="https://cdn.metroui.org.ua/current/metro.js"></script>
+</body>
+
+</html>

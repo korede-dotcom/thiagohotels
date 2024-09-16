@@ -392,6 +392,7 @@ const formattedDate = momentDate.set({hour: 1, minute: 0, second: 0}).format('YY
           },
         }
       );
+      console.log("🚀 ~ routes.get ~ response:", response)
   
       res.status(200).json({
         status: true,

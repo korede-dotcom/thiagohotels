@@ -44,6 +44,7 @@
 											<tr>
 												<!-- <th>Booking ID</th> -->
 												<th>Drink Name</th>
+												<th data-order="desc">Date</th>
 												<th>customerName</th>
 												<th>Amount</th>
 												<th>quantity</th>
@@ -59,6 +60,11 @@
 												<td>
 													<h2 class="table-avatar">
 														<%= element.drink_name %>
+                                                    </h2>
+                                                </td>
+												<td>
+													<h2 class="table-avatar">
+														<%= element.createdAt %>
                                                     </h2>
                                                 </td>
 												<td>

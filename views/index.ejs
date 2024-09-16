@@ -167,11 +167,13 @@
 <div class="page-wrapper">
 
   <!-- Main Header-->
-  <%- include('partials/header') %>
+
+  <%- include('partials/header', { title: 'thiagohotelsportal',activeMarquees:activeMarquees }) %>
 	<!--End Main Header -->
 
   <!-- banner section -->
   <section class="banner-section">
+
     <div class="banner-slider">
      
       <div class="banner-slide" data-delay-in="0.9">
@@ -242,6 +244,8 @@
   </section>
   <!-- End banner section -->
 
+
+
   <!-- About Section -->
   <section class="about-section">
     <div class="auto-container">
@@ -252,7 +256,7 @@
             <div class="sec-title">
               <span class="sub-title">Thiago Hotel</span>
               <h2>Most Safe & Rated <br>Hotel in Lagos.</h2>
-              <div class="text">Discover the top-rated and safest hotels in Lagos, where comfort meets security. Experience exceptional hospitality, world-class amenities, and a commitment to guest safety. Enjoy peace of mind during your stay, knowing you're in a hotel with a reputation for excellence and the highest standards of service in Lagos.<br></div>
+              <div class="text">Discover the top-rated and safest hotel in Lagos, where comfort meets security. Experience exceptional hospitality, world-class amenities, and a commitment to guest safety. Enjoy peace of mind during your stay, knowing you're in a hotel with a reputation for excellence and the highest standards of service in Lagos.<br></div>
             </div>
             <div class="outer-box">
               <div class="info-block">
@@ -269,7 +273,7 @@
               </div>
             </div>
             <div class="btn-box">
-              <a href="page-about.html" class="theme-btn btn-style-one"><span class="btn-title">Discover More</span></a>
+              <a href="/page-contact" class="theme-btn btn-style-one"><span class="btn-title">Discover More</span></a>
               <div class="contact-info">
                 <div class="icon-box"><i class="flaticon-customer-service"></i></div>
                 <span>Booking Now</span>
@@ -543,12 +547,14 @@
           </div>
         </div>
         <div class="btn-column col-lg-3 col-md-12 col-sm-12">
-          <!-- <div class="inner-column">
+          <div class="inner-column">
             <a href="https://www.youtube.com/watch?v=Fvae8nxzVz4" class="play-now-two" data-fancybox="gallery" data-caption="">
-              <img src="images/icons/play.png" alt="" />
+              <!-- <img src="images/icons/play.png" alt="" /> -->
+                <i class="fa fa-play"></i>
+              </a>
               <span class="ripple"></span>
             </a>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -855,11 +861,11 @@
               <h2>Check Availability </h2>
             </div>
             <p>Each of our guest rooms feature a private bath, wi-fi, cable television and include full breakfast.</p>
-            <p>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id placerat tacimates definitionem sea, prima quidam vim no. Duo nobis persecuti cu.</p>
+            <!-- <p>Mea nibh meis philosophia eu. Duis legimus efficiantur ea sea. Id placerat tacimates definitionem sea, prima quidam vim no. Duo nobis persecuti cu.</p> -->
             <div class="contact-info">
               <div class="icon-box"><i class="flaticon-customer-service"></i></div>
               <span>Booking Now</span>
-              <h4 class="title">956 220 6666</h4>
+              <!-- <h4 class="title">956 220 6666</h4> -->
             </div>
           </div>
         </div>
@@ -929,88 +935,7 @@
   </section> -->
   <!-- End news section -->
   <!-- Main Footer -->
-   <footer class="main-footer footer-style-one">
-    <!-- Widgets Section -->
-    <div class="widgets-section">
-      <div class="auto-container">
-        <div class="row">
-          <!-- Footer Column -->
-          <div class="footer-column col-lg-4 col-sm-6">
-            <div class="footer-widget about-widget wow fadeInLeft">
-              <div class="widget-content">
-                <div class="logo"><a href="#"> <img src="images/logo-2.png" alt="" title=""></a></div>
-                <div class="text">Welcome to the best five-star deluxe hotel in New <br>York. Hotel elementum sesue the aucan vestibulum <br>aliquam justo in sapien rutrum volutpat.</div>
-                <ul class="social-icon-two">
-                  <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                  <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                  <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                  <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- Footer Column -->
-          <!-- <div class="footer-column col-lg-2 col-sm-6 mb-0">
-            <div class="footer-widget links-widget wow fadeInLeft" data-wow-delay="200ms">
-              <h4 class="widget-title">Services Links</h4>
-              <div class="widget-content">
-                <ul class="user-links">
-                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Home</a></li>
-                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Rooms & Suites</a></li>
-                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Restaurant</a></li>
-                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Spa & Wellness</a></li>
-                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>About Hotel</a></li>
-                  <li><a href="#"><i class="fa-solid fa-crosshairs"></i>Contact</a></li>
-                </ul>
-              </div>
-            </div>                       
-          </div> -->
-          <!-- Footer Column -->
-          <div class="footer-column col-lg-3 col-sm-6">
-            <div class="footer-widget info-widget wow fadeInLeft" data-wow-delay="300ms">
-              <h4 class="widget-title">Information</h4>
-              <div class="widget-content">
-                <!-- Recent Post -->
-                <article class="recent-post">
-                  <div class="inner">
-                    <div class="post-info"><i class="fas fa-phone"></i> 1800-121-3637</div>
-                    <div class="post-info">+91-7052-101-786</div>
-                    <div class="post-info"><i class="fa fa-envelope"></i> info@example.com</div>
-                    <div class="post-info"><i class="fas fa-location"></i> 6 Adeniyi Street Itire Lagos, <br>Lagos State, Nigeria</div>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </div>
-          <!-- footer column -->
-          <!-- <div class="footer-column col-lg-3 col-sm-6">
-            <div class="footer-widget news-widget wow fadeInLeft" data-wow-delay="400ms">
-              <h4 class="widget-title">Newsletter</h4>
-              <div class="text">Lorem ipsum dolor sit amet consectetur Augue id fermentum</div>
-              <div class="subscribe-form-three">
-                <form method="post" action="#">
-                  <div class="form-group">
-                    <input type="email" name="email" class="email" value="" placeholder="Email Address" required="">
-                    <button type="button" class="theme-btn btn-style-one"><span class="btn-title"><i class="fa fa-paper-plane"></i></span></button>
-                  </div>
-                </form>
-              </div>
-              <div class="text"><i class="fa-regular fa-circle-check"></i>I agree to all terms and policies</div>
-            </div>
-          </div> -->
-        </div>
-      </div>
-    </div>
-    <!--  Footer Bottom -->
-    <div class="footer-bottom wow slideInUp">
-      <div class="auto-container">
-        <div class="inner-container">
-          <div class="copyright-text">© Copyrights 2023 ThiagoHoelandSuites All rights reserved.</div>
-          <div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-up"></span></div>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <%- include('partials/footer') %>
   <!--End Main Footer -->
 
 </div><!-- End Page Wrapper -->

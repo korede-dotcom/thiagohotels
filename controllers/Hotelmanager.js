@@ -7,6 +7,8 @@ const HotelBooking = require("../models/HotelBooking");
 const { Op,Sequelize } = require("sequelize");
 const moment = require("moment");
 const sequelize = require("sequelize");
+const Marque = require("../models/Marque");
+const axios = require("axios");
 
 const getPkgs = asynchandler( async (req,res) => {
     
@@ -87,13 +89,44 @@ const getBookings = asynchandler( async (req,res) => {
 
 const clientHotelRoom = asynchandler(async (req,res) => {
     const pkgs = await hotelConfigRepository.roomCategorys()
-    res.render('index', {
+    const currentTime = new Date();
+
+    // Fetch marquees where the current time is between start and end times
+    
+    const activeMarquees = await Marque.findOne({
+      where: {
+        startTime: {
+          [Op.lte]: currentTime  // Less than or equal to current time
+        },
+        endTime: {
+          [Op.gte]: currentTime   // Greater than or equal to current time
+        }
+      }
+    });
+
+    
+   return res.render('index', {
         pkgs: pkgs,
+        activeMarquees:activeMarquees
       });
 })
 const contact = asynchandler(async (req,res) => {
-   
-    return res.render('page-contact');
+
+    const currentTime = new Date();
+
+    // Fetch marquees where the current time is between start and end times
+    
+    const activeMarquees = await Marque.findOne({
+      where: {
+        startTime: {
+          [Op.lte]: currentTime  // Less than or equal to current time
+        },
+        endTime: {
+          [Op.gte]: currentTime   // Greater than or equal to current time
+        }
+      }
+    });
+    return res.render('page-contact',{activeMarquees:activeMarquees});
 })
 
 const paymentResult = asynchandler(async (req, res) => {
@@ -102,19 +135,47 @@ const paymentResult = asynchandler(async (req, res) => {
         const findBookings = await HotelBooking.findOne({
             where: { reference_id: req.query.reference.toString().trim() }
         });
-        console.log("🚀 ~ paymentResult ~ findBookings:", findBookings)
-       
-        const booking = findBookings;
+        if (!findBookings) {
+            return res.redirect('/');  
+        }
+
+        const { reference } = req.query;
+  
+        try {
+          const response = await axios.get(
+            `${process.env.paystackUrl}/transaction/verify/${reference}`,
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.paystackSecretKey}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          console.log("🚀 ~ res.status ~ response.data.data:", response.data.data.status,response.data.data.data)
+          if (response.data.data.status !== "success") {
+            return res.render("failed", { booking:findBookings });  
+          }
           
-        console.log("Booking object:", booking); // Log the booking object to verify its structure
+          return res.render("success", { booking:findBookings });  
+        }catch(error){
+            console.log("🚀 ~ paymentResult ~ error:", error)
+            return res.render("failed", { booking:findBookings });  
+        }
+       
+    //     const booking = findBookings;
+    //       console.log("🚀 ~ paymentResult ~ booking:", booking.status)
+    //       if (booking.status === "success") {
+    //         return res.render("failed", { booking:booking });  
+    //       }
+          
+    //     console.log("Booking object:", booking); // Log the booking object to verify its structure
         
-       return res.render("success", { booking:booking });  
+    //    return res.render("success", { booking:booking });  
 
   })
 
 const clientRoomAvailable = asynchandler(async (req, res) => {
     const { id, data,start,end } = req.query;
-    console.log("🚀 ~ clientRoomAvailable ~ id, data,start,end:", id, data,start,end)
 
     // Split the data string into an array of room numbers
     const roomNumbers = data?.split(',');
@@ -141,24 +202,52 @@ const clientRoomAvailable = asynchandler(async (req, res) => {
         end
     }
 
-    return res.render('room-details', { totalRooms: totalRooms,name:"ddd",selectedRoomNumber:selectedRoomNumber,start:start,end:end });
+    const currentTime = new Date();
+
+    // Fetch marquees where the current time is between start and end times
+    
+    const activeMarquees = await Marque.findOne({
+      where: {
+        startTime: {
+          [Op.lte]: currentTime  // Less than or equal to current time
+        },
+        endTime: {
+          [Op.gte]: currentTime   // Greater than or equal to current time
+        }
+      }
+    });
+
+
+    return res.render('room-details', { totalRooms: totalRooms,name:"ddd",selectedRoomNumber:selectedRoomNumber,start:start,end:end,activeMarquees:activeMarquees });
 });
 
 const clientRoom = asynchandler(async (req, res) => {
+    const currentTime = new Date();
+
+    // Fetch marquees where the current time is between start and end times
     
+    const activeMarquees = await Marque.findOne({
+      where: {
+        startTime: {
+          [Op.lte]: currentTime  // Less than or equal to current time
+        },
+        endTime: {
+          [Op.gte]: currentTime   // Greater than or equal to current time
+        }
+      }
+    });
 
     if (req.query.id) {
         const { id } = req.query;
         const category = await Room.findOne({where:{_id:id}});
         const count = await RoomNumber.count({where:{category_id:id}});
 
-    return res.render('room-details-one', { category: category.dataValues,count}); 
+    return res.render('room-details-one', { category: category.dataValues,count,activeMarquees:activeMarquees}); 
     }
 
     const category = await Room.findAll({});
-    console.log("🚀 ~ clientRoom ~ category:", category)
 
-    return res.render('rooms', { categories: category});
+    return res.render('rooms', { categories: category,activeMarquees:activeMarquees});
 
     // Room.belongsTo(RoomNumber,{foreignKey:'_id',targetKey:"category_id" });
 
@@ -237,7 +326,6 @@ const GetAvailability = asynchandler(async (req, res) => {
     });
 
     const availableRooms = totalRooms - bookedRooms;
-    console.log("🚀 ~ GetAvailability ~ availableRooms:", availableRooms);
 
     // Fetch details of available rooms that are not booked in the given date range
     const availableRoomDetails = await RoomNumber.findAll({
@@ -260,8 +348,6 @@ const GetAvailability = asynchandler(async (req, res) => {
         }
     });
 
-    console.log("🚀 ~ GetAvailability ~ availableRoomDetails:", availableRoomDetails);
-    console.log("🚀 ~ GetAvailability ~ availableRoomDetails.length:", availableRoomDetails.length);
 
     if (availableRoomDetails.length) {
         return res.json({
@@ -279,7 +365,7 @@ const GetAvailability = asynchandler(async (req, res) => {
     }
 
     return res.json({
-        message: "No room available in this category",
+        message: "No room available for this category you might want to check from our other nice category of rooms instead",
         status: false,
         start,
         end,

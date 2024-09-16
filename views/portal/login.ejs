@@ -67,10 +67,10 @@
 									<button class="btn btn-primary btn-block" id="loginBtn" type="submit">Login</button>
 								</div>
 							</form>
-							<div class="text-center forgotpass"><a href="forgot-password.html">Forgot Password?</a></div>
-							<div class="login-or"> <span class="or-line"></span> <span class="span-or">or</span> </div>
-							<div class="social-login"> <span>Login with</span> <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="google"><i class="fab fa-google"></i></a> </div>
-							<div class="text-center dont-have">Don’t have an account? <a href="register.html">Register</a></div>
+							<div class="text-center forgotpass"><a href="forgot-password">Forgot Password?</a></div>
+							<!-- <div class="login-or"> <span class="or-line"></span> <span class="span-or">or</span> </div>
+							<div class="social-login"> <span>Login with</span> <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="google"><i class="fab fa-google"></i></a> </div> -->
+							<!-- <div class="text-center dont-have">Don’t have an account? <a href="register.html">Register</a></div> -->
 						</div>
 					</div>
 				</div>
@@ -128,11 +128,14 @@
 					position: "center", // `left`, `center` or `right`
 					stopOnFocus: true, // Prevents dismissing of toast on hover
 					style: {
-						background: "red",
+						background:data.data.errorCode === '01' ? "green" : "red",
 					},
 					onClick: function(){} // Callback after click
 					}).showToast();
-					return
+					if (data.data.errorCode === '01') {
+						window.location.href = "/portal/first-time?id=" + data.data.user_id
+					}
+					return;
 				}
 				Toastify({
 				text: data.message,

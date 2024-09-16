@@ -7,7 +7,7 @@
                 </li>
                 <li class="list-divider"></li>
 
-                <% if (roleName === 'hotel receptionist' || roleName === 'ceo') { %>
+                <% if (roleName === 'hotel receptionist' || roleName === 'ceo' || roleName === "hotelmanager") { %>
                 <li class="submenu"> 
                     <a href="#"><i class="fas fa-suitcase"></i> <span> Booking </span> <span class="menu-arrow"></span></a>
                     <ul class="submenu_class" style="display: none;">
@@ -18,7 +18,7 @@
                 </li>
                 <% } %>
 
-                <% if (roleName === 'hotel receptionist' || roleName === 'ceo') { %>
+                <% if (roleName === 'hotel receptionist' || roleName === 'ceo' || roleName === "hotelmanager") { %>
                 <li class="submenu"> 
                     <a href="#"><i class="fas fa-user"></i> <span> Customers </span> <span class="menu-arrow"></span></a>
                     <ul class="submenu_class" style="display: none;">
@@ -27,7 +27,7 @@
                 </li>
                 <% } %>
 
-                <% if (roleName === 'hotel receptionist' || roleName === 'ceo') { %>
+                <% if (roleName === 'hotel receptionist' || roleName === 'ceo' || roleName === "hotelmanager") { %>
                 <li class="submenu"> 
                     <a href="#"><i class="fas fa-key"></i> <span> Rooms </span> <span class="menu-arrow"></span></a>
                     <ul class="submenu_class" style="display: none;">
@@ -37,7 +37,7 @@
                 </li>
                 <% } %>
 
-                <% if (roleName === 'ceo') { %>
+                <% if (roleName === 'ceo' || roleName === "hotelmanager") { %>
                 <li class="submenu"> 
                     <a href="#"><i class="fas fa-user"></i> <span> Staff </span> <span class="menu-arrow"></span></a>
                     <ul class="submenu_class" style="display: none;">
@@ -47,7 +47,7 @@
                 </li>
                 <% } %>
 
-                <% if (roleName === 'ceo' || roleName === 'bar manager') { %>
+                <% if (roleName === 'ceo' || roleName === 'bar manager' || roleName === "hotelmanager") { %>
                 <li class="submenu"> 
                     <a href="/portal/bar"><i class="fa-solid fa-wine-bottle"></i> <span> Bar </span> <span class="menu-arrow"></span></a>
                     <ul class="submenu_class" style="display: none;">
@@ -65,6 +65,11 @@
 
                 <% if (roleName === 'ceo') { %>
                 <li> 
+                    <a href="/portal/info-promotion"><i class="fas fa-audio-description"></i> <span>Promotions</span></a> 
+                </li>
+                <% } %>
+                <% if (roleName === 'ceo') { %>
+                <li> 
                     <a href="/portal/payment-mode"><i class="far fa-money-bill-alt"></i> <span>Payment Mode</span></a> 
                 </li>
                 <% } %>
@@ -72,3 +77,30 @@
         </div>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUrl = window.location.pathname; // Get current path
+    const menuItems = document.querySelectorAll('#sidebar-menu a'); // Get all menu items (including submenus)
+
+    menuItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (href === currentUrl) {
+            // Add 'active' class to the <li> that contains the active link
+            const parentLi = item.closest('li');
+            parentLi.classList.add('active');
+
+            // If the active link is within a submenu, expand the parent submenu
+            const submenu = item.closest('.submenu');
+            if (submenu) {
+                submenu.querySelector('ul').style.display = 'block'; // Expand the parent submenu
+            }
+
+            // Ensure no background color or active class is added to submenu items
+            item.classList.remove('active');
+        }
+    });
+});
+
+
+
+</script>

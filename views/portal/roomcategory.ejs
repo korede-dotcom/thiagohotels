@@ -32,7 +32,9 @@
 												<th>No Bed</th>
 												<th>No Guest</th>
 												<th>Date created</th>
+												<% if (roleName === 'ceo' || roleName === "hotelmanager") { %>
 												<th class="text-right">Actions</th>
+												<% } %>
 											</tr>
 										</thead>
 										<tbody>
@@ -53,7 +55,9 @@
 													<td><%= result.num_beds %></td>
 													<td><%= result.number_of_guests %></td>
 													<td><%= new Date(result.createdAt).toISOString().slice(0, 10).replace(/-/g, '/') %></td>
+													<% if (roleName === 'ceo' || roleName === "hotelmanager") { %>
 													<td class="text-right">
+
 														<div class="dropdown dropdown-action">
 															<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 																<i class="fas fa-ellipsis-v ellipse_color"></i>
@@ -68,6 +72,7 @@
 															</div>
 														</div>
 													</td>
+													<% } %>
 												</tr>
 											<% }) %>
 										</tbody>
