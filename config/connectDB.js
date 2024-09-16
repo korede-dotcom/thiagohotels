@@ -2,11 +2,13 @@ const { Sequelize } = require('sequelize');
 require("dotenv").config()
 
 if (!process.env.DATABASE_URL){
-const {dbName,dbUser,dbPassword,dbHost,dbDialect} = process.env
+const {dbName,dbUser,dbPassword,dbHost,dbDialect,dbSchema} = process.env
 module.exports = new Sequelize(dbName,dbUser,dbPassword, {
     host: dbHost,
     dialect: dbDialect,
     logging: false,
+    schema: dbSchema,
+    
     pool: {
         max: 5,
         min: 0,
