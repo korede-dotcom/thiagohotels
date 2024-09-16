@@ -37,9 +37,9 @@ app.use(cors());
     async function seed () {
         
       const seedAdmin = await User.findOne({where:{role_id:1}})
-      const hashed = await bcrypt.hash(process.env.adminPassword,10)
+      // const hashed = await bcrypt.hash(process.env.adminPassword,10)
       if (!seedAdmin) {
-          const createAdmin = await User.create({role_id:1,email:process.env.adminEmail,password:hashed,name:process.env.adminName})
+          const createAdmin = await User.create({role_id:1,email:process.env.adminEmail,password:process.env.adminPassword,name:process.env.adminName})
           console.log("🚀 ~ seed ~ createAdmin:", createAdmin)
       }
   }
