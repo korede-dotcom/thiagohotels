@@ -16,6 +16,7 @@ const { Sequelize,Op } = require('sequelize');
 const nodemailer = require('nodemailer');
 const SendEmail = require('./utils/sendEmail');
 const User = require('./models/User');
+const bcrypt = require('bcryptjs');
 
 require('dotenv').config();
 
