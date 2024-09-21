@@ -180,161 +180,177 @@
 	</script>
 
 <script>
-document.getElementById('roomCategoryForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    // Get the form element
-    const form = event.target;
-
-    // Get the submit button and its elements
-    const submitButton = form.querySelector('button[type="submit"]');
-    const buttonText = submitButton.querySelector('.button-text');
-    const spinner = submitButton.querySelector('.spinner-border');
-
-    // Validate that all fields are not empty
-    let valid = true;
-    const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-        if (!input.value.trim()) {
-            valid = false;
-            Toastify({
-                text: `${input.name} is required!`,
-                duration: 3000,
-                close: true,
-                gravity: "top",
-                position: "center",
-                stopOnFocus: true,
-                style: {
-                    background: "red",
-                }
-            }).showToast();
-        }
-    });
-
-    if (!valid) {
-        return; // Exit the function if any field is empty
-    }
-
-    // Show spinner and disable submit button
-    buttonText.classList.add('d-none');
-    spinner.classList.remove('d-none');
-    submitButton.disabled = true;
-
-    // Create a FormData object from the form
-    const formData = new FormData(form);
-    formData.append("branch_id", 1);
-
-    try {
-        // Send the form data using the fetch API
-        const response = await fetch('/hotelmanager/create', {
-            method: 'POST',
-            body: formData,
-        });
-
-        // Handle the response
-        if (response.ok) {
-            Toastify({
-                text: "Category added successfully!",
-                duration: 3000,
-                close: true,
-                gravity: "top",
-                position: "center",
-                stopOnFocus: true,
-                style: {
-                    background: "green",
-                }
-            }).showToast();
-            form.reset(); // Reset the form after successful submission
-            document.getElementById('imagePreview').innerHTML = ''; // Clear image previews
-        } else {
-            const errorData = await response.json();
-            Toastify({
-                text: `Failed to add category: ${errorData.message}`,
-                duration: 3000,
-                close: true,
-                gravity: "top",
-                position: "center",
-                stopOnFocus: true,
-                style: {
-                    background: "red",
-                }
-            }).showToast();
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        Toastify({
-            text: 'An error occurred while submitting the form.',
-            duration: 3000,
-            close: true,
-            gravity: "top",
-            position: "center",
-            stopOnFocus: true,
-            style: {
-                background: "red",
-            }
-        }).showToast();
-    } finally {
-        // Hide spinner and enable submit button
-        spinner.classList.add('d-none');
-        buttonText.classList.remove('d-none');
-        submitButton.disabled = false;
-    }
-});
-
-
-document.getElementById('picture').addEventListener('change', function(event) {
-    const files = event.target.files;
-    const imagePreview = document.getElementById('imagePreview');
-
-    // Clear any previous images
-    imagePreview.innerHTML = '';
-
-    // Loop through selected files and create image previews
-    Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // Create an img element to display the image
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.alt = file.name;
-            img.style.width = '100px'; // Adjust width as needed
-            img.style.margin = '10px';
-
-            // Append the img element to the preview container
-            imagePreview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
-});
-
-
-document.getElementById('picture').addEventListener('change', function(event) {
-    const files = event.target.files;
-    const imagePreview = document.getElementById('imagePreview');
-
-    // Clear any previous images
-    imagePreview.innerHTML = '';
-
-    // Loop through selected files and create image previews
-    Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            // Create an img element to display the image
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.alt = file.name;
-            img.style.width = '100px'; // Adjust width as needed
-            img.style.margin = '10px';
-
-            // Append the img element to the preview container
-            imagePreview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
-});
-
-
-</script>
+	document.getElementById('roomCategoryForm').addEventListener('submit', async function(event) {
+		event.preventDefault();
+	
+		// Get the form element
+		const form = event.target;
+	
+		// Get the submit button and its elements
+		const submitButton = form.querySelector('button[type="submit"]');
+		const buttonText = submitButton.querySelector('.button-text');
+		const spinner = submitButton.querySelector('.spinner-border');
+	
+		// Validate that all fields are not empty
+		let valid = true;
+		const inputs = form.querySelectorAll('input, select, textarea');
+		const formData = {};
+	
+		inputs.forEach(input => {
+			if (!input.value.trim() && input.type !== 'file') {
+				valid = false;
+				Toastify({
+					text: `${input.name} is required!`,
+					duration: 3000,
+					close: true,
+					gravity: "top",
+					position: "center",
+					stopOnFocus: true,
+					style: {
+						background: "red",
+					}
+				}).showToast();
+			} else if (input.type !== 'file') {
+				formData[input.name] = input.value; // Collect form field values
+			}
+		});
+	
+		if (!valid) {
+			return; // Exit if validation fails
+		}
+	
+		// Show spinner and disable submit button
+		buttonText.classList.add('d-none');
+		spinner.classList.remove('d-none');
+		submitButton.disabled = true;
+	
+		// Get the files to be uploaded
+		const files = form.querySelector('input[type="file"]').files;
+		const uploadedImageUrls = [];
+	
+		// Upload each image to Cloudinary and collect the URLs
+		for (const file of files) {
+			const imageData = new FormData();
+			imageData.append('file', file);
+			imageData.append('upload_preset', 'thiago'); // Replace with your actual Cloudinary upload preset
+			imageData.append('folder', 'samebrothers'); // Your folder name
+	
+			try {
+				const cloudinaryResponse = await fetch(`https://api.cloudinary.com/v1_1/bada/image/upload`, {
+					method: 'POST',
+					body: imageData
+				});
+				const cloudinaryData = await cloudinaryResponse.json();
+				uploadedImageUrls.push(cloudinaryData.secure_url); // Collect uploaded image URL
+			} catch (error) {
+				console.error('Error uploading to Cloudinary:', error);
+				Toastify({
+					text: 'An error occurred while uploading the image.',
+					duration: 3000,
+					close: true,
+					gravity: "top",
+					position: "center",
+					stopOnFocus: true,
+					style: {
+						background: "red",
+					}
+				}).showToast();
+				return; // Exit the function if upload fails
+			}
+		}
+	
+		// Add additional data
+		formData.branch_id = 1;
+		formData.picture = uploadedImageUrls; // Use the image URLs in the JSON
+	
+		try {
+			// Send the form data (as JSON) using the fetch API
+			const response = await fetch('/hotelmanager/create/category', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(formData), // Send JSON data
+			});
+	
+			// Handle the response
+			if (response.ok) {
+				Toastify({
+					text: "Category added successfully!",
+					duration: 3000,
+					close: true,
+					gravity: "top",
+					position: "center",
+					stopOnFocus: true,
+					style: {
+						background: "green",
+					}
+				}).showToast();
+				form.reset(); // Reset the form after successful submission
+				document.getElementById('imagePreview').innerHTML = ''; // Clear image previews
+			} else {
+				const errorData = await response.json();
+				Toastify({
+					text: `Failed to add category: ${errorData.message}`,
+					duration: 3000,
+					close: true,
+					gravity: "top",
+					position: "center",
+					stopOnFocus: true,
+					style: {
+						background: "red",
+					}
+				}).showToast();
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			Toastify({
+				text: 'An error occurred while submitting the form.',
+				duration: 3000,
+				close: true,
+				gravity: "top",
+				position: "center",
+				stopOnFocus: true,
+				style: {
+					background: "red",
+				}
+			}).showToast();
+		} finally {
+			// Hide spinner and enable submit button
+			spinner.classList.add('d-none');
+			buttonText.classList.remove('d-none');
+			submitButton.disabled = false;
+		}
+	});
+	
+	// Image preview functionality
+	document.getElementById('picture').addEventListener('change', function(event) {
+		const files = event.target.files;
+		const imagePreview = document.getElementById('imagePreview');
+	
+		// Clear any previous images
+		imagePreview.innerHTML = '';
+	
+		// Loop through selected files and create image previews
+		Array.from(files).forEach(file => {
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				// Create an img element to display the image
+				const img = document.createElement('img');
+				img.src = e.target.result;
+				img.alt = file.name;
+				img.style.width = '100px'; // Adjust width as needed
+				img.style.margin = '10px';
+	
+				// Append the img element to the preview container
+				imagePreview.appendChild(img);
+			};
+			reader.readAsDataURL(file);
+		});
+	});
+	</script>
+	
+	
 </body>
 
 </html>

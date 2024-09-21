@@ -514,8 +514,18 @@ const createhotelpkg = asynchandler(async (req,res) => {
 
    });
 
-   if(req.user.role_id === 1){
-    const createeventpackage = await hotelConfigRepository.create({...req.body,branch_id:req.body.branch,status:true,picture:[...imageObject.map(r => r.secure_url)]})
+//    if(req.user.role_id === 1){
+//     const createeventpackage = await hotelConfigRepository.create({...req.body,branch_id:req.body.branch,status:true,picture:[...imageObject.map(r => r.secure_url)]})
+//     return res.status(200).json({
+//         status:true,
+//         message:"hotel roomn created ",
+//         data:{
+//             createeventpackage
+//         }
+//     })
+//    }
+
+    const createeventpackage = await hotelConfigRepository.create({...req.body,status:false,picture:[...imageObject.map(r => r.secure_url)]})
     return res.status(200).json({
         status:true,
         message:"hotel roomn created ",
@@ -523,9 +533,34 @@ const createhotelpkg = asynchandler(async (req,res) => {
             createeventpackage
         }
     })
-   }
+});
 
-    const createeventpackage = await hotelConfigRepository.create({...req.body,status:false,picture:[...imageObject.map(r => r.secure_url)]})
+const createhotelpkgCat = asynchandler(async (req,res) => {
+ 
+//   const upload = await cloudinaryRepo.uploadMany(req.files)
+//   console.log("🚀 ~ file: Hotelmanager.js:77 ~ createhotelpkg ~ upload:", upload)
+//    const imageObject = upload.map(url => {
+//        return {        
+//            secure_url: url.secure_url,
+//            url:url.url
+           
+//        }
+
+//    });
+
+//    if(req.user.role_id === 1){
+//     const createeventpackage = await hotelConfigRepository.create({...req.body,branch_id:req.body.branch,status:true,picture:[...imageObject.map(r => r.secure_url)]})
+//     return res.status(200).json({
+//         status:true,
+//         message:"hotel roomn created ",
+//         data:{
+//             createeventpackage
+//         }
+//     })
+//    }
+
+console.log("🚀 ~ createhotelpkgCat ~ req.body.imageUrls:", req.body.imageUrls)
+    const createeventpackage = await hotelConfigRepository.create(req.body)
     return res.status(200).json({
         status:true,
         message:"hotel roomn created ",
@@ -603,7 +638,8 @@ module.exports = {
     paymentResult,
     GetAvailabilityToday,
     clientRoom,
-    contact
+    contact,
+    createhotelpkgCat
 };
 
 

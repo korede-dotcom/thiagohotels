@@ -17,6 +17,7 @@ const checkAuthCookie = require("../middleware/checkAuthCookie")
         .get("/pending/pkg",protect ,allowedUser([1,5,4]),checkHotelStatus,hotemanagerControl.getPendingPkgs)
         .get("/approve/pkg",protect ,allowedUser([1]),checkHotelStatus,hotemanagerControl.approve)
         .get("/bookings",protect ,allowedUser([1,4,5,7]),checkHotelStatus,hotemanagerControl.getBookings)
+        .post("/create/category",checkAuthCookie ,allowedUser([1,4,5]),/*createHotelConfigValidator,*/hotemanagerControl.createhotelpkgCat)
     routes.post("/bookroom",protect ,allowedUser([1,4,5,7]),checkHotelStatus,hotemanagerControl.bookRoom)
 
 module.exports = routes
