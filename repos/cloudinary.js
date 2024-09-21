@@ -17,7 +17,11 @@ class CloudinaryRepo {
       transformation: [{ width: 500, height: 500, crop: 'limit' }]
     });
 
-    this._parser = multer({ storage: storage }).any('image');
+    // this._parser = multer({ storage: storage, }).any('image');
+    this._parser = multer({
+      storage: storage,
+      limits: { fileSize: 10 * 1024 * 1024 } // 10MB
+    }).any('image');
   }
 
   upload(files) {
