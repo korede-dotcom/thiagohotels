@@ -45,15 +45,66 @@ app.use(cors());
   }
       seed()
 
-    cron.schedule(process.env.crontime, async () => {
+    // cron.schedule("0 12 * * *" async () => {
+    //   try {
+    //     const now = new Date();        
+    //     const { Op } = require('sequelize');
+    //     const today = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
+        
+    //     const bookings = await HotelBooking.findAll({
+    //       where: {
+    //         // checked_out: false,
+    //         status: 'success',
+    //         end: {
+    //           [Op.gte]: today + 'T00:00:00.000Z',
+    //           [Op.lt]: today + 'T23:59:59.999Z'
+    //         }
+    //       }
+    //     });
+    //     // console.log("🚀 ~ cron.schedule ~ bookings:", bookings)
+        
+        
+        
+    //     // Filter out bookings where end time is today but not yet expired
+    //     const expiredBookings = bookings.filter(booking => {
+    //       const endTime = new Date(booking.end);
+    //       return endTime < now; // Ensure end time is strictly less than current time
+    //     });
+        
+    //     console.log("Expired bookings found:", expiredBookings);
+        
+    //     if (expiredBookings.length > 0) {
+    //       const roomNumbers = expiredBookings.map(booking => booking.room_number);
+    //       console.log("🚀 ~ cron.schedule ~ roomNumbers:", roomNumbers)
+
+    //       if (roomNumbers.length > 0) {
+    //           // Update the status of all rooms in the RoomNumber table to false
+    //          const updateRoom = await RoomNumber.update({ status: false }, {
+    //               where: {
+    //                   room_number: {
+    //                       [Sequelize.Op.in]: roomNumbers,
+    //                   },
+    //               },
+    //           });
+    //          console.log("🚀 ~ cron.schedule ~ updateRoom:", updateRoom)
+    //     } else {
+    //       console.log("No rooms to update.");
+    //     }
+    //   }
+        
+    //   } catch (error) {
+    //     console.error('Error updating room status:', error);
+    //   }
+    // });
+
+    cron.schedule("0 11 * * *", async () => {
       try {
         const now = new Date();        
         const { Op } = require('sequelize');
         const today = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
-        
+    
         const bookings = await HotelBooking.findAll({
           where: {
-            // checked_out: false,
             status: 'success',
             end: {
               [Op.gte]: today + 'T00:00:00.000Z',
@@ -61,41 +112,39 @@ app.use(cors());
             }
           }
         });
-        // console.log("🚀 ~ cron.schedule ~ bookings:", bookings)
-        
-        
-        
+    
         // Filter out bookings where end time is today but not yet expired
         const expiredBookings = bookings.filter(booking => {
           const endTime = new Date(booking.end);
           return endTime < now; // Ensure end time is strictly less than current time
         });
-        
+    
         console.log("Expired bookings found:", expiredBookings);
-        
+    
         if (expiredBookings.length > 0) {
           const roomNumbers = expiredBookings.map(booking => booking.room_number);
-          console.log("🚀 ~ cron.schedule ~ roomNumbers:", roomNumbers)
-
+          console.log("Room numbers to update:", roomNumbers);
+    
           if (roomNumbers.length > 0) {
-              // Update the status of all rooms in the RoomNumber table to false
-             const updateRoom = await RoomNumber.update({ status: false }, {
-                  where: {
-                      room_number: {
-                          [Sequelize.Op.in]: roomNumbers,
-                      },
-                  },
-              });
-             console.log("🚀 ~ cron.schedule ~ updateRoom:", updateRoom)
-        } else {
-          console.log("No rooms to update.");
+            // Update the status of all rooms in the RoomNumber table to false
+            const updateRoom = await RoomNumber.update({ status: false }, {
+              where: {
+                room_number: {
+                  [Op.in]: roomNumbers,
+                },
+              },
+            });
+            console.log("Rooms updated:", updateRoom);
+          } else {
+            console.log("No rooms to update.");
+          }
         }
-      }
-        
       } catch (error) {
-        console.error('Error updating room status:', error);
+        console.error('Error updating room status:', error.stack);
       }
     });
+    
+
 
     const findAllPaymentModes = await PaymentMode.findAll();
     if (findAllPaymentModes.length === paymentModes.length) {
