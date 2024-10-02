@@ -1,6 +1,6 @@
 const { Sequelize, Op } = require('sequelize');
-const HotelBooking = require('../models/HotelBooking'); // Adjust the path if necessary
-const RoomNumber = require('../models/RoomNumbers'); // Adjust the path if necessary
+const HotelBooking = require('./models/HotelBooking'); // Adjust the path if necessary
+const RoomNumber = require('./models/RoomNumbers'); // Adjust the path if necessary
 const connectDB = require('./config/connectDB');
 
 (async () => {
