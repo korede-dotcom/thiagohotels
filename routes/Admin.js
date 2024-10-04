@@ -828,6 +828,9 @@ routes.get("/bar-records",checkAuthCookie,expressAsyncHandler(async (req,res) =>
       return
 }))
 routes.get("/bar-all-drinks",checkAuthCookie,expressAsyncHandler(async (req,res) => {
+      // Drink model
+Drink.hasMany(DrinkLog, { foreignKey: 'drink_name' });
+
 
       const drinks = await Drink.findAll({
             attributes: [
