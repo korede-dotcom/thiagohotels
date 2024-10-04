@@ -10,6 +10,7 @@ const Drink = sequelize.define('Drink', {
   },
   totalStock: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     defaultValue: 0 // Default stock is 0
   },
   leftInStock:{
