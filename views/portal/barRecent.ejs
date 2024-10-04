@@ -195,27 +195,28 @@
             color: #94081a;
             cursor: pointer;
         }
-        .product-card {
+/* Product Card Styling */
+.product-card {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 15px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s, border 0.2s;
   border: 2px solid transparent;
-  flex: 1 1 calc(15% - 20px); /* 4 cards per row on large screens */
   margin: 10px;
-}
-
-.product-card.selected {
-  border: 2px solid #94081a;
 }
 
 .product-card:hover {
   transform: scale(1.05);
 }
 
+.product-card.selected {
+  border: 2px solid #94081a;
+}
+
+/* Product Box (for product details) */
 .product-box {
   background-color: #94081a;
   color: white;
@@ -224,119 +225,100 @@
   margin-bottom: 10px;
 }
 
+/* Product Name */
 .product-name {
   font-size: 1.1em;
   margin: 0;
 }
 
+/* Product Info */
 .product-info {
   color: black;
   font-size: 1.2em;
   font-weight: bold;
 }
 
-/* 4 cards per row on large screens */
-@media (min-width: 1200px) {
-  .product-card {
-    flex: 1 1 calc(25% - 20px); /* 4 cards per row */
-  }
-}
-
-/* 3 cards per row on medium screens */
-@media (max-width: 1200px) {
-  .product-card {
-    flex: 1 1 calc(33.33% - 20px); /* 3 cards per row */
-  }
-}
-
-/* 2 cards per row on tablets */
-@media (max-width: 992px) {
-  .product-card {
-    flex: 1 1 calc(50% - 20px); /* 2 cards per row */
-  }
-}
-
-/* 1 card per row on mobile phones */
-@media (max-width: 768px) {
-  .product-card {
-    flex: 1 1 calc(100% - 20px); /* 1 card per row */
-  }
-}
-
-/* Adjust height or container to show 4 per page */
+/* Product Container (Grid Layout) */
 .product-container {
-  display: flex;
-  flex-wrap: wrap;
-  max-height: 800px; /* Adjust height to limit number of visible cards */
-  overflow: hidden;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  padding: 20px;
 }
 
-.product-box {
-  padding: 15px; /* Reduce padding on smaller screens */
+/* Responsive Adjustments */
+
+/* 3 columns per row on medium screens */
+@media (max-width: 1200px) {
+  .product-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-.product-name {
-  font-size: 1em; /* Adjust font size */
+/* 2 columns per row on tablets */
+@media (max-width: 992px) {
+  .product-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.product-info {
-  font-size: 1.1em; /* Adjust font size */
-}
-
-
-/* Ensure the product grid is flexible */
-#product-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-/* Sidebar (Summary) toggle button */
-.toggle-sidebar {
-    display: none;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    background-color: #94081a;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    z-index: 1000;
-    cursor: pointer;
-}
-
-/* Sidebar hidden on smaller screens */
+/* 1 column per row on mobile phones */
 @media (max-width: 768px) {
-    .sidebar {
-        position: fixed;
-        left: -350px;
-        top: 0;
-        width: 350px;
-        height: 100vh;
-        background-color: #94081a;
-        transition: left 0.3s ease;
-        z-index: 999;
-    }
-
-    /* When sidebar is shown */
-    .sidebar.show {
-        left: 0;
-    }
-
-    /* Show the toggle button on small screens */
-    .toggle-sidebar {
-        display: block;
-    }
-
-    .main-content {
-        margin-left: 0; /* Ensure the main content takes full width */
-    }
+  .product-container {
+    grid-template-columns: 1fr;
+  }
 }
+
+/* Sidebar Toggle Button */
+.toggle-sidebar {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background-color: #94081a;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: -350px;
+  top: 0;
+  width: 350px;
+  height: 100vh;
+  background-color: #94081a;
+  transition: left 0.3s ease;
+  z-index: 999;
+}
+
+/* Sidebar when visible */
+.sidebar.show {
+  left: 0;
+}
+
+/* Show the toggle button on small screens */
+@media (max-width: 768px) {
+  .toggle-sidebar {
+    display: block;
+  }
+
+  /* Ensure main content takes full width */
+  .main-content {
+    margin-left: 0;
+  }
+}
+
 
     </style>
 </head>
 
 <body>
+    
     <button class="toggle-sidebar" onclick="toggleSidebar()">Show Summary</button>
 
     <div class="sidebar" id="sidebar">
@@ -409,6 +391,42 @@
     
         console.log("🚀 ~ parsedProducts:", parsedProducts);
         console.log("🚀 ~ products:", products);
+        const itemsPerPage = 4;
+let currentPage = 1;
+
+function showPage(page) {
+  const allProducts = document.querySelectorAll('.product-card');
+  const totalItems = allProducts.length;
+
+  // Hide all items first
+  allProducts.forEach(item => item.style.display = 'none');
+
+  // Show only the products for the current page
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  for (let i = start; i < end && i < totalItems; i++) {
+    allProducts[i].style.display = 'block';
+  }
+}
+
+function nextPage() {
+  const totalProducts = document.querySelectorAll('.product-card').length;
+  if (currentPage * itemsPerPage < totalProducts) {
+    currentPage++;
+    showPage(currentPage);
+  }
+}
+
+function previousPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    showPage(currentPage);
+  }
+}
+
+// Initialize first page
+showPage(currentPage);
+
     
         function renderProductGrid(products) {
             const grid = document.getElementById('product-grid');
