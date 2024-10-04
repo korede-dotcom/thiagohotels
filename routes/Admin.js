@@ -828,6 +828,22 @@ routes.get("/bar-records",checkAuthCookie,expressAsyncHandler(async (req,res) =>
       return
 }))
 routes.get("/bar-all-drinks",checkAuthCookie,expressAsyncHandler(async (req,res) => {
+
+      const [results, metadata] = await sequelize.query(`
+            SELECT
+              d.id,
+              d.name,
+              d.totalStock,
+              d.price,
+              COALESCE(d.totalStock - SUM(dl.quantity), d.totalStock) AS leftInStock
+            FROM Drinks d
+            LEFT JOIN DrinkLogs dl ON dl.drinkId = d.id
+            GROUP BY d.id
+            ORDER BY d.id DESC
+          `);
+          console.log("🚀 ~ routes.get ~ results:", results)
+          
+      
       const drinks = await Drink.findAll({
             order: [
               ['id', 'DESC']
