@@ -786,7 +786,7 @@ routes.get("/bar-buy-records",checkAuthCookie,expressAsyncHandler(async (req,res
       }
       const DrinkLogs = await DrinkLog.findAll({
             order: [
-              ['createdAt', 'DESC']
+              ['id', 'DESC']
             ]
       });
       res.render("barOlder", {
