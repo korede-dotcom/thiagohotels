@@ -856,7 +856,6 @@ routes.get("/bar-all-drinks",checkAuthCookie,expressAsyncHandler(async (req,res)
               ['id', 'DESC']
             ]
       });
-      console.log("🚀 ~ routes.get ~ drinks:", drinks)
      return  res.render("all-drinks", {
             name: req.user.name,
             email: req.user.email,
