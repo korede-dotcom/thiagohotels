@@ -520,8 +520,8 @@ showPage(currentPage);
                     <div class="product-info">
                         <h3 style="color:#94081a;">${product.name}</h3>
                         <p>#${product.price.toFixed(2)}</p>
-                          <p>total sold: ${product.totalSales}</p>
-                        <p>left in stock: ${product.totalStock}</p>
+                          <p>sold: ${product.totalSales} </p>
+                        <p> left: ${product.leftInStock} -- stock: ${product.totalStock}</p>
                     </div>
                 </div>
             `).join('');
