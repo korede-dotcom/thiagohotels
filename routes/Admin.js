@@ -810,12 +810,13 @@ routes.get("/bar-records",checkAuthCookie,expressAsyncHandler(async (req,res) =>
                   email: req.user.email,
                   roleName: req.user.roleName,
                   logs:DrinkLogs
+
             })
             return
       }
       const DrinkLogs = await DrinkLog.findAll({
             order: [
-              ['createdAt', 'DESC']
+              ['id', 'DESC']
             ]
       });
       res.render("all-bar-records", {
