@@ -949,12 +949,14 @@ routes.post("/bar-buy", checkAuthCookie, expressAsyncHandler(async (req, res) =>
     
           // Calculate the updated stock
           const updatedStock = drink.totalStock - quantity;
+          const updateSales = drink.totalSales + quantity;
           if (updatedStock < 0) {
             throw new Error(`Insufficient stock for ${name}`);
           }
     
           // Update the drink's stock
-          await drink.update({ totalStock: updatedStock }, { transaction });
+      //     await drink.update({ totalStock: updatedStock }, { transaction });
+          await drink.update({ leftInStock: updatedStock,totalSales: updateSales}, { transaction });
     
           // Create a log entry for the transaction
           await DrinkLog.create({

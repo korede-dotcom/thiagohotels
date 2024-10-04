@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bar</title>
+    <title>Thiago Bar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/hotel_logo.png">
+
 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
@@ -234,21 +236,31 @@
 }
 
 /* Responsive layout adjustments */
+/* 4 cards per row on large screens */
+@media (min-width: 1200px) {
+  .product-card {
+    flex: 1 1 calc(25% - 20px); /* 4 cards per row */
+  }
+}
+
+/* 3 cards per row on medium screens */
 @media (max-width: 1200px) {
   .product-card {
-    flex: 1 1 calc(33.33% - 20px); /* 3 cards per row on medium screens */
+    flex: 1 1 calc(33.33% - 20px); /* 3 cards per row */
   }
 }
 
+/* 2 cards per row on tablets */
 @media (max-width: 992px) {
   .product-card {
-    flex: 1 1 calc(50% - 20px); /* 2 cards per row on tablets */
+    flex: 1 1 calc(50% - 20px); /* 2 cards per row */
   }
 }
 
+/* 1 card per row on mobile phones */
 @media (max-width: 768px) {
   .product-card {
-    flex: 1 1 calc(100% - 20px); /* 1 card per row on mobile phones */
+    flex: 1 1 calc(100% - 20px); /* 1 card per row */
   }
 
   .product-box {
