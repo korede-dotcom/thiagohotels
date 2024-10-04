@@ -195,17 +195,105 @@
             color: #94081a;
             cursor: pointer;
         }
-/* Product Card Styling */
-.product-card {
+        .product-card {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 15px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s, border 0.2s;
+  transition: transform 0.2s;
+  border: 2px solid transparent;
+  flex: 1 1 calc(15% - 20px); /* 4 cards per row on large screens */
+  margin: 10px;
+}
+
+.product-card.selected {
+  border: 2px solid #94081a;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-box {
+  background-color: #94081a;
+  color: white;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.product-name {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+.product-info {
+  color: black;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Container for product cards */
+.product-container {
+  display: grid;
+  gap: 20px; /* Space between grid items */
+  grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  max-height: 100vh; /* Limits height to viewport height if necessary */
+  overflow: hidden; /* Hide overflow */
+  padding: 20px;
+}
+
+/* 3 columns per row on medium screens */
+@media (max-width: 1200px) {
+  .product-container {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  }
+}
+
+/* 2 columns per row on tablets */
+@media (max-width: 992px) {
+  .product-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  }
+}
+
+/* 1 column per row on mobile phones */
+@media (max-width: 768px) {
+  .product-container {
+    grid-template-columns: 1fr; /* 1 column */
+  }
+}
+
+.product-card {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-name {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.product-info {
+  font-size: 1em;
+}
+
+/* Product Card Styling */
+.product-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
   border: 2px solid transparent;
   margin: 10px;
+  height: 250px; /* Adjusted height */
 }
 
 .product-card:hover {
@@ -216,37 +304,22 @@
   border: 2px solid #94081a;
 }
 
-/* Product Box (for product details) */
-.product-box {
-  background-color: #94081a;
-  color: white;
-  border-radius: 5px;
-  padding: 20px;
-  margin-bottom: 10px;
-}
-
-/* Product Name */
-.product-name {
-  font-size: 1.1em;
-  margin: 0;
-}
-
-/* Product Info */
-.product-info {
-  color: black;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
 /* Product Container (Grid Layout) */
 .product-container {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  grid-template-columns: repeat(4, 1fr); /* 4 columns on laptops */
   padding: 20px;
 }
 
 /* Responsive Adjustments */
+
+/* 4 columns per row on large screens */
+@media (min-width: 1200px) {
+  .product-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 
 /* 3 columns per row on medium screens */
 @media (max-width: 1200px) {
@@ -262,57 +335,68 @@
   }
 }
 
-/* 1 column per row on mobile phones */
+/* 3 columns per row on mobile phones */
 @media (max-width: 768px) {
   .product-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on mobile */
+  }
+
+  /* Reduce card size for mobile */
+  .product-card {
+    height: 200px; /* Smaller height for mobile */
+    padding: 8px;
   }
 }
 
-/* Sidebar Toggle Button */
+
+/* Ensure the product grid is flexible */
+#product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+/* Sidebar (Summary) toggle button */
 .toggle-sidebar {
-  display: none;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  background-color: #94081a;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  z-index: 1000;
-  cursor: pointer;
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: #94081a;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    z-index: 1000;
+    cursor: pointer;
 }
 
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  left: -350px;
-  top: 0;
-  width: 350px;
-  height: 100vh;
-  background-color: #94081a;
-  transition: left 0.3s ease;
-  z-index: 999;
-}
-
-/* Sidebar when visible */
-.sidebar.show {
-  left: 0;
-}
-
-/* Show the toggle button on small screens */
+/* Sidebar hidden on smaller screens */
 @media (max-width: 768px) {
-  .toggle-sidebar {
-    display: block;
-  }
+    .sidebar {
+        position: fixed;
+        left: -350px;
+        top: 0;
+        width: 350px;
+        height: 100vh;
+        background-color: #94081a;
+        transition: left 0.3s ease;
+        z-index: 999;
+    }
 
-  /* Ensure main content takes full width */
-  .main-content {
-    margin-left: 0;
-  }
+    /* When sidebar is shown */
+    .sidebar.show {
+        left: 0;
+    }
+
+    /* Show the toggle button on small screens */
+    .toggle-sidebar {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0; /* Ensure the main content takes full width */
+    }
 }
-
 
     </style>
 </head>
