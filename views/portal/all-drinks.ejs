@@ -324,6 +324,16 @@
           #${product.price.toFixed(2)}
         </h3>
       </div>
+	  	<div style="display:flex;justify-content:space-around">	
+				
+				<div  id="stocks-${product.id}" oninput="showSaveButton(${product.id})">
+					<span>totalSales: ${product.totalSales}</span>
+				</div>
+				<div  id="stocks-${product.id}" oninput="showSaveButton(${product.id})">
+					<span>leftInStock: ${product.leftInStock}</span>
+				</div>
+     
+		</div>
       <div style="float:right;" contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
         <span>Stock: ${product.totalStock}</span>
       </div>
