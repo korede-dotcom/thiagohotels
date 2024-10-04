@@ -324,15 +324,19 @@
           #${product.price.toFixed(2)}
         </h3>
       </div>
-      <div style="float:right;" contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
+	  <div style="display:flex">	
+		  <div  contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
         <span>Stock: ${product.totalStock}</span>
       </div>
-      <div style="float:right;" contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
+      <div  contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
         <span>Stock: ${product.totalStock}</span>
       </div>
-      <div style="float:right;" contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
+      <div contenteditable="true" id="stock-${product.id}" oninput="showSaveButton(${product.id})">
         <span>Stock: ${product.totalStock}</span>
       </div>
+		
+	</div>
+    
       <button id="save-btn-${product.id}" onclick="saveEdits(${product.id})" class="btn btn-primary" style="display: none;">
         Save
       </button>
