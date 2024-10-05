@@ -888,6 +888,8 @@ routes.post("/bar-edit-drinks",checkAuthCookie,expressAsyncHandler(async(req,res
             name: req.body.name.toLowerCase(),
             totalStock: req.body.totalStock,
             price: req.body.price,
+            leftInStock:req.body.totalStock,
+            totalSales:0,
        
       },{where:{id:req.body.id}})
       console.log("🚀 ~ routes.post ~ saveBar:", saveBar)
