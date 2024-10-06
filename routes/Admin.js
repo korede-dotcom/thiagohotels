@@ -965,7 +965,7 @@ routes.post("/bar-buy", checkAuthCookie, expressAsyncHandler(async (req, res) =>
             amount: total,             // Total amount for the drink
             drink_name: name,          // Drink name
             quantity: quantity,        // Quantity of drinks purchased
-            stockAfterTransaction: updatedStock,
+            stockAfterTransaction: drink.totalStock - quantity,
             staff_name: req.user.name, // Staff name from authenticated user
           }, { transaction });
         }
