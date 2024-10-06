@@ -957,7 +957,7 @@ routes.post("/bar-buy", checkAuthCookie, expressAsyncHandler(async (req, res) =>
     
           // Update the drink's stock
       //     await drink.update({ totalStock: updatedStock }, { transaction });
-          await drink.update({ leftInStock: updatedStock,totalSales: updateSales}, { transaction });
+          await drink.update({ leftInStock: drink.totalStock - quantity,totalSales: updateSales}, { transaction });
     
           // Create a log entry for the transaction
           await DrinkLog.create({
