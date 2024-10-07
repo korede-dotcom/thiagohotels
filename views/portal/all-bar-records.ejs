@@ -36,12 +36,33 @@
 										
 										</div>
 									  </form>
+									  <div class="" >
+										<p id="total-amount-dates">Total Amount for <span id="start-date"><%= start %></span> - <span id="end-date"><%= end %></span></p>
+										<h3 style="background: #94081a;border-radius: 5px;"><%= totalAmount %></h3>
+									</div>
+									
+									<script>
+										// Function to format the date to a readable format
+										function formatDate(dateString) {
+											const date = new Date(dateString);
+											return date.toLocaleDateString('en-GB', {
+												year: 'numeric',
+												month: 'long',
+												day: 'numeric'
+											});
+										}
+									
+										// Get the start and end date elements
+										const startDateElement = document.getElementById('start-date');
+										const endDateElement = document.getElementById('end-date');
+									
+										// Format and update the dates in the DOM
+										startDateElement.textContent = formatDate(startDateElement.textContent);
+										endDateElement.textContent = formatDate(endDateElement.textContent);
+									</script>
 									<table class="datatable table table-stripped table table-hover table-center mb-0">
-											<div class="">
-												<p>Total Amount for <%= start %> - <%= end %></p>
-												<h3><%= totalAmount %></h3>
-												
-											</div>
+										
+										
 										<thead>
 											<tr>
 												<!-- <th>Booking ID</th> -->
