@@ -824,8 +824,7 @@ endDate.setHours(23, 59, 59, 999);
                   },
               });
             console.log("🚀 ~ routes.get ~ totalAmount:", totalAmount)
-           const  totalDrinksSoldToday = DrinkLogs.filter(log => log.createdAt.toISOString().substring(0, 10) === new Date().toISOString().substring(0, 10)).length;
-           console.log("🚀 ~ routes.get ~ totalDrinksSoldToday:", totalDrinksSoldToday)
+            
            
             res.render("all-bar-records", {
                   name: req.user.name,
@@ -833,8 +832,8 @@ endDate.setHours(23, 59, 59, 999);
                   roleName: req.user.roleName,
                   logs:DrinkLogs,
                   totalAmount: totalAmount,
-                  startDate: req.query.start,
-                  endDate: req.query.end,
+                  start: req.query.start,
+                  end: req.query.end,
                   totalDrinksSold: DrinkLogs.length,
                  
 
