@@ -815,6 +815,15 @@ endDate.setHours(23, 59, 59, 999);
                     ['createdAt', 'DESC']
                   ]
             });
+            const totalAmount = await DrinkLog.sum('totalAmount', {
+                  where: {
+                      createdAt: {
+                          [Op.gte]: startDate,
+                          [Op.lte]: endDate,
+                      },
+                  },
+              });
+            console.log("🚀 ~ routes.get ~ totalAmount:", totalAmount)
             res.render("all-bar-records", {
                   name: req.user.name,
                   email: req.user.email,
