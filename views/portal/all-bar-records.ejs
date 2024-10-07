@@ -64,7 +64,12 @@
                                                 </td>
 												<td>
 													<h2 class="table-avatar">
-														<%= element.createdAt %>
+														<%= new Date(element.createdAt).toLocaleDateString('en-GB', {
+															weekday: 'short', year: 'numeric', month: 'long', day: 'numeric'
+														}) %> at 
+														<%= new Date(element.createdAt).toLocaleTimeString('en-GB', {
+															hour: '2-digit', minute: '2-digit'
+														}) %>
                                                     </h2>
                                                 </td>
 												<td>
