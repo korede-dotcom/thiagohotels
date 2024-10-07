@@ -840,6 +840,20 @@ endDate.setHours(23, 59, 59, 999);
             })
             return
       }
+      const startDate = new Date(); // Get the current date
+startDate.setHours(0, 0, 0, 0); // Set start time to 00:00:00
+
+const endDate = new Date(); // Get the current date
+endDate.setHours(23, 59, 59, 999);
+
+      const totalAmount = await DrinkLog.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: startDate,
+                    [Op.lte]: endDate,
+                },
+            },
+        });
       const DrinkLogs = await DrinkLog.findAll({
             order: [
               ['id', 'DESC']
@@ -849,7 +863,11 @@ endDate.setHours(23, 59, 59, 999);
             name: req.user.name,
             email: req.user.email,
             roleName: req.user.roleName,
-            logs:DrinkLogs
+            logs:DrinkLogs,
+            totalAmount: totalAmount,
+            start: startDate,
+            end: endDate,
+            totalDrinksSold: DrinkLogs.length,
       })
       return
 }))
