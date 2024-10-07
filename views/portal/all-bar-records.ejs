@@ -37,9 +37,7 @@
 										</div>
 									  </form>
 									<table class="datatable table table-stripped table table-hover table-center mb-0">
-										  
-									
-										  
+
 										<thead>
 											<tr>
 												<!-- <th>Booking ID</th> -->
@@ -54,9 +52,9 @@
 											</tr>
 										</thead>
 										<tbody>
-											<% logs.map(element => { %>
+											<% logs.map((element,i) => { %>
 											<tr>
-												<!-- <td>BKG-0001</td> -->
+												<td><%= i + 1 %></td>
 												<td>
 													<h2 class="table-avatar">
 														<%= element.drink_name %>
