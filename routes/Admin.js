@@ -799,8 +799,18 @@ routes.get("/bar-buy-records",checkAuthCookie,expressAsyncHandler(async (req,res
 }))
 routes.get("/bar-records",checkAuthCookie,expressAsyncHandler(async (req,res) => {
       if (req.query.start && req.query.end) { 
+            const startDate = new Date(req.query.start);
+const endDate = new Date(req.query.end);
+
+// Adjust endDate to include the full day (23:59:59)
+endDate.setHours(23, 59, 59, 999);
             const DrinkLogs = await DrinkLog.findAll({
-                  where: {createdAt: { [Op.gte]: req.query.start, [Op.lte]: req.query.end }},
+                  where: {
+                        createdAt: {
+                              [Op.gte]: startDate,
+                              [Op.lte]: endDate,
+                          }
+                  },
                   order: [
                     ['createdAt', 'DESC']
                   ]
