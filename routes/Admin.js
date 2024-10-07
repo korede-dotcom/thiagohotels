@@ -815,7 +815,7 @@ endDate.setHours(23, 59, 59, 999);
                     ['createdAt', 'DESC']
                   ]
             });
-            const totalAmount = await DrinkLog.sum('totalAmount', {
+            const totalAmount = await DrinkLog.sum('amount', {
                   where: {
                       createdAt: {
                           [Op.gte]: startDate,
