@@ -802,7 +802,7 @@ routes.get("/bar-records",checkAuthCookie,expressAsyncHandler(async (req,res) =>
             const DrinkLogs = await DrinkLog.findAll({
                   where: {createdAt: { [Op.gte]: req.query.start, [Op.lte]: req.query.end }},
                   order: [
-                    ['id', 'DESC']
+                    ['createdAt', 'DESC']
                   ]
             });
             res.render("all-bar-records", {
