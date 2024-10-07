@@ -39,7 +39,20 @@
 									  <center>
 										<div class="" >
 											<p id="total-amount-dates">Total Amount for <span id="start-date"><%= start %></span> - <span id="end-date"><%= end %></span></p>
-											<h3 style="background: #94081a;border-radius: 5px;"><%= totalAmount %></h3>
+											<h2 id="total-amount" style="background: #94081a;border-radius: 5px; width: 50%; color: #fff;"><%= totalAmount %></h2>
+											<script>
+												// Function to format amount to Naira (₦)
+												function formatNaira(amount) {
+													return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(amount);
+												}
+											
+												// Get the total amount element
+												const totalAmountElement = document.getElementById('total-amount');
+											
+												// Format and update the total amount to Naira
+												const totalAmount = parseFloat(totalAmountElement.textContent); // Ensure it's a number
+												totalAmountElement.textContent = formatNaira(totalAmount);
+											</script>
 										</div>
 									  </center>
 									
