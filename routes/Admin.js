@@ -321,6 +321,73 @@ OFFSET
 
 routes.get("/all-booking",checkAuthCookie,async (req, res) => {
       const hasQueryParams = Object.keys(req.query).length > 0;
+      const startDate = new Date(); // Get the current date
+      startDate.setHours(0, 0, 0, 0); // Set start time to 00:00:00
+      
+      const endDate = new Date(); // Get the current date
+      endDate.setHours(23, 59, 59, 999);
+      const bookings = await HotelBooking.findAll({order: [['createdAt', 'DESC']]})
+      
+      const totalAmount = await HotelBooking.sum('amount', {
+            where: {
+                status:"success",
+                'createdAt': {
+                    [Op.gte]: startDate,
+                    [Op.lte]: endDate,
+                },
+
+            },
+        });
+        console.log("🚀 ~ routes.get ~ totalAmount:", totalAmount)
+    
+
+      if (req.query.start && req.query.end) { 
+            const startDate = new Date(req.query.start);
+            const endDate = new Date(req.query.end);
+
+            endDate.setHours(23, 59, 59, 999);
+
+            const totalAmounts = await HotelBooking.sum('amount', {
+                  where: {
+                      status:"success",
+                      'createdAt': {
+                          [Op.gte]: startDate,
+                          [Op.lte]: endDate,
+                      },
+      
+                  },
+              });
+              console.log("🚀 ~ routes.get ~ totalAmount:", totalAmount)
+            console.log("🚀 ~ routes.get ~ totalAmount:", totalAmount)
+            const bookings = await HotelBooking.findAll({
+                  where: {
+                        createdAt: {
+                              [Op.gte]: startDate,
+                              [Op.lte]: endDate,
+                          }
+                  },
+                  // order: [
+                  //   ['createdAt', 'DESC']
+                  // ]
+            });
+           
+            
+           
+            res.render("all-booking", {
+                  name: req.user.name ,
+                  email: req.user.email ,
+                  roleName:req.user.roleName,
+                  bookings:bookings,
+                  hasQueryParams:hasQueryParams,
+                  totalAmount: totalAmounts,
+                  start: req.query.start,
+                  end: req.query.end,
+            })
+            return
+      }
+
+
+
       if (req.query.room_number) {
             const bookings = await HotelBooking.findAll({
                   where: {
@@ -331,6 +398,15 @@ routes.get("/all-booking",checkAuthCookie,async (req, res) => {
                     ['createdAt', 'DESC']
                   ]
                 });
+
+                const totalAmounts = await HotelBooking.sum('amount', {
+                  where: {
+                        room_number: req.query.room_number,
+                      status:"success",
+                    
+      
+                  },
+              });
                 
       
             return res.render('all-booking', {
@@ -338,9 +414,13 @@ routes.get("/all-booking",checkAuthCookie,async (req, res) => {
                   email: req.user.email ,
                   roleName:req.user.roleName,
                   bookings:bookings,
-                  hasQueryParams:hasQueryParams
+                  hasQueryParams:hasQueryParams,
+                  start: startDate,
+                  end: endDate,
+                  totalAmount:totalAmounts
                 }) 
       }
+
       if (req.query.type) {
             let bookings;
             switch (req.query.type) {
@@ -353,14 +433,25 @@ routes.get("/all-booking",checkAuthCookie,async (req, res) => {
                                 ['createdAt', 'DESC']
                               ]
                             });
-                            
+                        
+                            const totalAmounts = await HotelBooking.sum('amount', {
+                              where: {
+                                   booked_from:"web-online",
+                                  status:"success",
+                                
+                  
+                              },
+                          });
                   
                         return res.render('all-booking', {
                               name: req.user.name ,
                               email: req.user.email ,
                               roleName:req.user.roleName,
                               bookings:bookings,
-                              hasQueryParams:hasQueryParams
+                              hasQueryParams:hasQueryParams,
+                              start: startDate,
+                              end: endDate,
+                              totalAmount:totalAmounts
                             }) 
                         break;
             
@@ -373,6 +464,16 @@ routes.get("/all-booking",checkAuthCookie,async (req, res) => {
                                 ['createdAt', 'DESC']
                               ]
                             });
+
+                            const totalAmoun = await HotelBooking.sum('amount', {
+                              where: {
+                                   booked_from:"reception",
+                                  status:"success",
+                                
+                  
+                              },
+                          });
+                            
                             
                   
                         return res.render('all-booking', {
@@ -380,14 +481,20 @@ routes.get("/all-booking",checkAuthCookie,async (req, res) => {
                               email: req.user.email ,
                               roleName:req.user.roleName,
                               bookings:bookings,
-                              hasQueryParams:hasQueryParams
+                              hasQueryParams:hasQueryParams,
+                              start: startDate,
+                              end: endDate,
+                              totalAmount:totalAmoun
                             }) 
 
                         break;
             }
           
       }
-      const bookings = await HotelBooking.findAll({order: [['createdAt', 'DESC']]})
+    
+
+        
+        
       
       res.render('all-booking', {
             name: req.user.name ,
@@ -395,6 +502,9 @@ routes.get("/all-booking",checkAuthCookie,async (req, res) => {
             roleName:req.user.roleName,
             bookings:bookings,
             hasQueryParams:false,
+            start: startDate,
+            end: endDate,
+            totalAmount:totalAmount
           })
 })
 routes.get("/add-booking",checkAuthCookie,async (req, res) => {

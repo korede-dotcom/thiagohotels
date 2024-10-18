@@ -19,6 +19,52 @@
 						<div class="card card-table">
 							<div class="card-body booking_card">
 								<div class="table-responsive">
+									<form method="get" action="/portal/all-booking">
+										<div class="row">
+										  <div class="col-md-4">
+											<label for="start">Start Date:</label>
+											<input type="date" id="start" name="start" class="form-control" required>
+										  </div>
+										  <div class="col-md-4">
+											<label for="end">End Date:</label>
+											<input type="date" id="end" name="end" class="form-control" required>
+										  </div>
+										  <div class="col-md-4">
+											<label>&nbsp;</label>
+											<button type="submit" class="btn btn-primary btn-block">Filter</button>
+											<a style="color: #94081a;float: right;" href="/portal/all-booking">See All</a>
+										  </div>
+										</div>
+									  </form>
+									  
+									  <center>
+										<div class="" >
+											<p id="total-amount-dates">Total Amount for <span id="start-date"><%= start %></span> - <span id="end-date"><%= end %></span></p>
+											<h2 id="total-amoun" style="background: #94081a;border-radius: 5px; width: 50%; color: #fff;">
+												<%= (totalAmount / 100 || 0).toLocaleString('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 0 }) %>
+											</h2>
+										
+										</div>
+									  </center>
+									  <script>
+										// Function to format the date to a readable format
+										function formatDate(dateString) {
+											const date = new Date(dateString);
+											return date.toLocaleDateString('en-GB', {
+												year: 'numeric',
+												month: 'long',
+												day: 'numeric'
+											});
+										}
+									
+										// Get the start and end date elements
+										const startDateElement = document.getElementById('start-date');
+										const endDateElement = document.getElementById('end-date');
+									
+										// Format and update the dates in the DOM
+										startDateElement.textContent = formatDate(startDateElement.textContent);
+										endDateElement.textContent = formatDate(endDateElement.textContent);
+									</script>
 									<table class="datatable table table-stripped table table-hover table-center mb-0">
 										
 										<div class="top-nav-search">
@@ -48,7 +94,8 @@
 												<th>S/N</th>
 												<th>Booking ID</th>
 												<th>Name</th>
-												<th>Room Name</th>
+												<th>Amount</th>
+												<th>Room Type</th>
 												<th>Room Number</th>
 												<th>Booked From</th>
 												<!-- <th>Date</th>
@@ -82,7 +129,11 @@
 														<a href="/portal/check-in?key=<%= element.reference_id %>"><%= element.guest_name %> <span>#0001</span></a>
 														</h2>
 													</td>
-													<td><%= element.room_name%></td>
+													<td><%= (element.amount / 100 || 0).toLocaleString('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 0 }) %></td>
+
+
+												
+													<td><%= element.category_name%></td>
 													<td><%= element.room_number%></td>
 													<td><%= element.booked_from%></td>
 													<!-- <td>21-03-2020</td>
@@ -165,13 +216,18 @@
 	<script src="assets/plugins/raphael/raphael.min.js"></script>
 	<script src="assets/js/script.js"></script>
 	<script>
+
 		// Check if the query parameter "room_number" exists in the URL
 		const params = new URLSearchParams(window.location.search);
 		if (params.has('room_number')) {
 		  // Show the "Go Back" button if a search was performed
 		  document.getElementById('goBackButton').style.display = 'block';
 		}
+
+		
 	  </script>
+
+	  
 </body>
 
 </html>
